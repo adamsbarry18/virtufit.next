@@ -16,6 +16,8 @@ RUN npm ci
 FROM node:20-bullseye-slim AS builder
 WORKDIR /app
 COPY . .
+# ensure public exists to avoid COPY failure in the runner stage when public/ is missing
+RUN mkdir -p /app/public
 # copy installed deps from deps stage so build can reuse them
 COPY --from=deps /app/node_modules ./node_modules
 ENV NODE_ENV=production
