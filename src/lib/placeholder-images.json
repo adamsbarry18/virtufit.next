@@ -1,0 +1,40 @@
+{
+  "placeholderImages": [
+    {
+      "id": "item-tshirt-black",
+      "description": "Stylish Black T-Shirt",
+      "imageUrl": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
+      "imageHint": "black t-shirt"
+    },
+    {
+      "id": "item-denim-jacket",
+      "description": "Classic Denim Jacket",
+      "imageUrl": "https://placehold.co/987x987?text=Denim%20Jacket",
+      "imageHint": "denim jacket"
+    },
+    {
+      "id": "item-summer-dress",
+      "description": "Vibrant Summer Dress",
+      "imageUrl": "https://placehold.co/987x987?text=Summer%20Dress",
+      "imageHint": "red dress"
+    },
+    {
+      "id": "item-cozy-sweater",
+      "description": "Cozy Knit Sweater",
+      "imageUrl": "https://placehold.co/987x987?text=Knit%20Sweater",
+      "imageHint": "knit sweater"
+    },
+    {
+      "id": "item-formal-blazer",
+      "description": "Formal Blue Blazer",
+      "imageUrl": "https://placehold.co/987x987?text=Blue%20Blazer",
+      "imageHint": "blue blazer"
+    },
+    {
+      "id": "item-biker-jacket",
+      "description": "Leather Biker Jacket",
+      "imageUrl": "https://placehold.co/987x987?text=Biker%20Jacket",
+      "imageHint": "leather jacket"
+    }
+  ]
+}
