@@ -77,18 +77,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Remove local .vercel config if present
-        run: |
-          if [ -d ".vercel" ]; then
-            rm -rf .vercel
-          fi
-
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
+      - name: Clean Vercel cache/config
+        run: rm -rf .vercel
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: .
-          vercel-args: '--prod --confirm'
+          prod: true
