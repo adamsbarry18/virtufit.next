@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
 
     const res = await fetch(url, {
       headers: {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+        'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
         'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
       },
       // Avoid caching for freshness
@@ -30,20 +31,21 @@ export async function POST(req: NextRequest) {
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    const items: Array<{ id: string; imageUrl: string; description: string; imageHint?: string }> = [];
+    const items: Array<{ id: string; imageUrl: string; description: string; imageHint?: string }> =
+      [];
 
     const seen = new Set<string>();
 
     // Heuristics for common e-commerce structures
     // Try specific selectors for known e-commerce platforms first
-    
+
     // Zalando-specific: Look for product images in common containers
     const zalandoSelectors = [
       'article img',
       '.z-navicat-header_productImageContainer img',
       '[data-testid="product-card"] img',
       '.cat_productTile img',
-      '.catalogArticlesList_productBox img'
+      '.catalogArticlesList_productBox img',
     ];
 
     // Try Zalando-specific selectors first
@@ -56,7 +58,8 @@ export async function POST(req: NextRequest) {
           $el.attr('data-original') ||
           $el.attr('data-lazy-src') ||
           $el.attr('srcset')?.split(',')[0]?.trim().split(' ')[0] ||
-          $el.attr('src') || '';
+          $el.attr('src') ||
+          '';
 
         if (!src || src.length < 10) return;
 
@@ -70,14 +73,19 @@ export async function POST(req: NextRequest) {
         seen.add(src);
 
         const alt = ($el.attr('alt') || '').trim();
-        const title = $el.closest('article, a, div[class*="product"]').find('h2, h3, .title, [class*="title"]').first().text().trim();
+        const title = $el
+          .closest('article, a, div[class*="product"]')
+          .find('h2, h3, .title, [class*="title"]')
+          .first()
+          .text()
+          .trim();
         const description = title || alt || 'Item';
 
-        items.push({ 
-          id: String(items.length), 
-          imageUrl: src, 
-          description, 
-          imageHint: alt || undefined 
+        items.push({
+          id: String(items.length),
+          imageUrl: src,
+          description,
+          imageHint: alt || undefined,
         });
       });
     }
@@ -91,41 +99,47 @@ export async function POST(req: NextRequest) {
           $el.attr('data-src') ||
           $el.attr('data-original') ||
           $el.attr('data-lazy') ||
-          $el.attr('src') || '';
+          $el.attr('src') ||
+          '';
 
-      if (!src) return;
+        if (!src) return;
 
-      // Resolve srcset by picking the largest image if present
-      const srcset: string | undefined = $el.attr('srcset');
-      if (srcset && !src.startsWith('http')) {
-        // Choose the last candidate (usually the largest)
-        const candidates = srcset
-          .split(',')
-          .map((s: string) => s.trim().split(' ')[0])
-          .filter(Boolean);
-        if (candidates.length) src = candidates[candidates.length - 1];
-      }
+        // Resolve srcset by picking the largest image if present
+        const srcset: string | undefined = $el.attr('srcset');
+        if (srcset && !src.startsWith('http')) {
+          // Choose the last candidate (usually the largest)
+          const candidates = srcset
+            .split(',')
+            .map((s: string) => s.trim().split(' ')[0])
+            .filter(Boolean);
+          if (candidates.length) src = candidates[candidates.length - 1];
+        }
 
-      // Make absolute URL
-      try {
-        src = new URL(src, url).toString();
-      } catch {
-        return;
-      }
+        // Make absolute URL
+        try {
+          src = new URL(src, url).toString();
+        } catch {
+          return;
+        }
 
-      // Basic filtering: skip icons/sprites/tiny images
-      const alt = ($el.attr('alt') || '').trim();
-      const width = parseInt($el.attr('width') || '0', 10);
-      const height = parseInt($el.attr('height') || '0', 10);
-      if (width && width < 120) return;
-      if (height && height < 120) return;
+        // Basic filtering: skip icons/sprites/tiny images
+        const alt = ($el.attr('alt') || '').trim();
+        const width = parseInt($el.attr('width') || '0', 10);
+        const height = parseInt($el.attr('height') || '0', 10);
+        if (width && width < 120) return;
+        if (height && height < 120) return;
 
-      if (seen.has(src)) return;
-      seen.add(src);
+        if (seen.has(src)) return;
+        seen.add(src);
 
-      const description = alt || 'Item';
-      items.push({ id: String(items.length), imageUrl: src, description, imageHint: alt || undefined });
-    });
+        const description = alt || 'Item';
+        items.push({
+          id: String(items.length),
+          imageUrl: src,
+          description,
+          imageHint: alt || undefined,
+        });
+      });
     }
 
     // Deduplicate and limit

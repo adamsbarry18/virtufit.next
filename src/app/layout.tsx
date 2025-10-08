@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import { Providers } from "./providers";
-import "./globals.css";
+/* eslint-disable @next/next/no-page-custom-font */
+import type { Metadata } from 'next';
+import { Providers } from './providers';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "VirtuFit",
-  description: "Virtual Try-On for E-Commerce",
+  title: 'VirtuFit',
+  description: 'Virtual Try-On for E-Commerce',
 };
 
 export default function RootLayout({

@@ -1,11 +1,12 @@
-"use client";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
-import type { ImagePlaceholder } from "@/lib/placeholder-images";
-import { useI18n } from "@/context/i18n-context";
-import { Shirt, Search } from "lucide-react";
+/* eslint-disable @next/next/no-img-element */
+'use client';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import type { ImagePlaceholder } from '@/lib/placeholder-images';
+import { useI18n } from '@/context/i18n-context';
+import { Shirt, Search } from 'lucide-react';
 
 interface CatalogPanelProps {
   items: (ImagePlaceholder & { isInCart: boolean })[];
@@ -20,10 +21,10 @@ export function CatalogPanel({
   onSelectItem,
   onAddToCart,
   onSuggestColors,
-  isSuggestionLoading
+  isSuggestionLoading,
 }: CatalogPanelProps) {
   const { t } = useI18n();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredItems = items.filter((item) =>
     item.description.toLowerCase().includes(searchQuery.toLowerCase())
@@ -33,8 +34,8 @@ export function CatalogPanel({
     <Card className="h-full flex flex-col border-2">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-            <Shirt className="w-6 h-6 text-primary" />
-            {t('catalogTitle')}
+          <Shirt className="w-6 h-6 text-primary" />
+          {t('catalogTitle')}
         </CardTitle>
         <div className="relative mt-3">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -57,9 +58,9 @@ export function CatalogPanel({
           ) : (
             <div className="grid grid-cols-2 gap-4">
               {filteredItems.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="space-y-2 cursor-pointer group"
+                <div
+                  key={item.id}
+                  className="space-y-2 cursor-pointer group relative"
                   onClick={() => onSelectItem(item)}
                   draggable
                   onDragStart={(e) => {
@@ -81,9 +82,37 @@ export function CatalogPanel({
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {/* Action buttons overlay */}
+                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSuggestColors?.(item);
+                          }}
+                          disabled={isSuggestionLoading}
+                          aria-label="Suggest colors"
+                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
+                        >
+                          🎨
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart?.(item);
+                          }}
+                          aria-label="Add to cart"
+                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
+                        >
+                          ➕
+                        </button>
+                      </div>
                     </div>
                   </Card>
-                  <p className="text-xs font-medium text-center text-foreground truncate px-1">{item.description}</p>
+                  <p className="text-xs font-medium text-center text-foreground truncate px-1">
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </div>

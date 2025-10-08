@@ -24,10 +24,7 @@ const GenerateTryOnImageInputSchema = z.object({
     .describe(
       "An array of clothing items as data URIs that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
-  newColor: z
-    .string()
-    .optional()
-    .describe('An optional new color to apply to the clothing item.'),
+  newColor: z.string().optional().describe('An optional new color to apply to the clothing item.'),
   provider: z
     .enum(['openai', 'gemini', 'leonardo', 'seedream'])
     .describe('AI provider to use for image generation'),
@@ -38,20 +35,14 @@ const GenerateTryOnImageInputSchema = z.object({
       'API key for the selected provider (forwarded from client; not stored server-side by this flow)'
     ),
 });
-export type GenerateTryOnImageInput = z.infer<
-  typeof GenerateTryOnImageInputSchema
->;
+export type GenerateTryOnImageInput = z.infer<typeof GenerateTryOnImageInputSchema>;
 
 const GenerateTryOnImageOutputSchema = z.object({
   generatedImageDataUri: z
     .string()
-    .describe(
-      'The generated image with the clothing items applied to the user, as a data URI.'
-    ),
+    .describe('The generated image with the clothing items applied to the user, as a data URI.'),
 });
-export type GenerateTryOnImageOutput = z.infer<
-  typeof GenerateTryOnImageOutputSchema
->;
+export type GenerateTryOnImageOutput = z.infer<typeof GenerateTryOnImageOutputSchema>;
 
 export async function generateTryOnImage(
   input: GenerateTryOnImageInput
@@ -110,8 +101,7 @@ const generateTryOnImageFlow = ai.defineFlow(
       inp: GenerateTryOnImageInput,
       prompt: string
     ): Promise<GenerateTryOnImageOutput> {
-      if (!inp.apiKey)
-        throw new Error('OpenAI API key required for provider "openai".');
+      if (!inp.apiKey) throw new Error('OpenAI API key required for provider "openai".');
       try {
         const { default: OpenAI } = await import('openai');
         const client = new OpenAI({ apiKey: inp.apiKey as string });
@@ -139,8 +129,7 @@ const generateTryOnImageFlow = ai.defineFlow(
       inp: GenerateTryOnImageInput,
       prompt: string
     ): Promise<GenerateTryOnImageOutput> {
-      if (!inp.apiKey)
-        throw new Error('Gemini API key required for provider "gemini".');
+      if (!inp.apiKey) throw new Error('Gemini API key required for provider "gemini".');
       try {
         const mod = await import('@google/genai');
         const { GoogleGenAI } = mod as any;
@@ -170,8 +159,7 @@ const generateTryOnImageFlow = ai.defineFlow(
       inp: GenerateTryOnImageInput,
       prompt: string
     ): Promise<GenerateTryOnImageOutput> {
-      if (!inp.apiKey)
-        throw new Error('Leonardo API key required for provider "leonardo".');
+      if (!inp.apiKey) throw new Error('Leonardo API key required for provider "leonardo".');
       try {
         // Leonardo example uses a POST to /generations
         const body = {
@@ -183,26 +171,19 @@ const generateTryOnImageFlow = ai.defineFlow(
           prompt,
           width: 1024,
         };
-        const res = await fetch(
-          'https://cloud.leonardo.ai/api/rest/v1/generations',
-          {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${inp.apiKey}`,
-            },
-            body: JSON.stringify(body),
-          }
-        );
+        const res = await fetch('https://cloud.leonardo.ai/api/rest/v1/generations', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${inp.apiKey}`,
+          },
+          body: JSON.stringify(body),
+        });
         const json = await res.json();
         // Leonardo often returns a job id; a separate polling call may be required.
         // If the response contains image URLs/data return them, otherwise fallback.
-        if (
-          json?.artifacts &&
-          json.artifacts.length > 0 &&
-          json.artifacts[0].base64
-        ) {
+        if (json?.artifacts && json.artifacts.length > 0 && json.artifacts[0].base64) {
           return {
             generatedImageDataUri: `data:image/png;base64,${json.artifacts[0].base64}`,
           };
@@ -214,9 +195,7 @@ const generateTryOnImageFlow = ai.defineFlow(
             const imgRes = await fetch(json.data[0].url);
             const buffer = Buffer.from(await imgRes.arrayBuffer());
             return {
-              generatedImageDataUri: `data:image/png;base64,${buffer.toString(
-                'base64'
-              )}`,
+              generatedImageDataUri: `data:image/png;base64,${buffer.toString('base64')}`,
             };
           } catch (e) {
             console.warn('Failed to fetch Leonardo returned URL:', e);
@@ -233,12 +212,10 @@ const generateTryOnImageFlow = ai.defineFlow(
       inp: GenerateTryOnImageInput,
       prompt: string
     ): Promise<GenerateTryOnImageOutput> {
-      if (!inp.apiKey)
-        throw new Error('Seedream API key required for provider "seedream".');
+      if (!inp.apiKey) throw new Error('Seedream API key required for provider "seedream".');
       try {
         // Seedream (BytePlus Ark) example uses a client SDK in Python; here we attempt a direct POST
-        const url =
-          'https://ark.ap-southeast.bytepluses.com/api/v3/images/generate';
+        const url = 'https://ark.ap-southeast.bytepluses.com/api/v3/images/generate';
         const body = {
           model: 'seedream-4-0-250828',
           prompt,
@@ -267,9 +244,7 @@ const generateTryOnImageFlow = ai.defineFlow(
             const imgRes = await fetch(imageUrl);
             const buffer = Buffer.from(await imgRes.arrayBuffer());
             return {
-              generatedImageDataUri: `data:image/png;base64,${buffer.toString(
-                'base64'
-              )}`,
+              generatedImageDataUri: `data:image/png;base64,${buffer.toString('base64')}`,
             };
           } catch (e) {
             console.warn('Failed to fetch Seedream returned URL:', e);

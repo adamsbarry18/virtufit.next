@@ -58,8 +58,7 @@ export const translations = {
 
     // VirtuFit Client
     virtualTryOnTitle: 'Your Virtual Try-On',
-    virtualTryOnSubtitle:
-      'Upload your photo and select items to see them on you.',
+    virtualTryOnSubtitle: 'Upload your photo and select items to see them on you.',
 
     // Import from Web
     importFromWeb: 'Import from Web',
@@ -129,8 +128,7 @@ export const translations = {
 
     // Photo Upload Panel
     uploadTitle: 'Téléchargez votre photo',
-    uploadSubtitle:
-      'Téléchargez une photo claire de face pour de meilleurs résultats.',
+    uploadSubtitle: 'Téléchargez une photo claire de face pour de meilleurs résultats.',
     uploadButton: 'Choisir un fichier',
     fileSelected: 'Fichier :',
     noFileSelected: 'Aucun fichier sélectionné.',
@@ -166,8 +164,7 @@ export const translations = {
 
     // Import from Web
     importFromWeb: 'Importer depuis le Web',
-    importFromWebSubtitle:
-      'Collez une URL e-commerce pour extraire les articles.',
+    importFromWebSubtitle: 'Collez une URL e-commerce pour extraire les articles.',
     catalogUrlPlaceholder: 'https://www.zalando.fr/mode-homme/',
     loadCatalog: 'Charger',
     resetToDefault: 'Réinitialiser',
@@ -200,13 +197,10 @@ export const translations = {
     // User Guide
     guideTitle: 'Comment utiliser VirtuFit',
     guideStep1: '1. Téléchargez votre photo ou utilisez votre caméra',
-    guideStep2:
-      "2. Collez une URL e-commerce et cliquez sur 'Charger' pour importer des articles",
-    guideStep3:
-      '3. Recherchez et sélectionnez des articles du catalogue pour les essayer',
+    guideStep2: "2. Collez une URL e-commerce et cliquez sur 'Charger' pour importer des articles",
+    guideStep3: '3. Recherchez et sélectionnez des articles du catalogue pour les essayer',
     guideStep4: '4. Changez les couleurs avec la palette ci-dessous',
-    guideNote:
-      'Note : Glissez-déposez des articles sur votre photo pour un essayage instantané',
+    guideNote: 'Note : Glissez-déposez des articles sur votre photo pour un essayage instantané',
   },
 };
 
