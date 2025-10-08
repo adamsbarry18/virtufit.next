@@ -11,11 +11,17 @@ import { Shirt, Search } from 'lucide-react';
 interface CatalogPanelProps {
   items: (ImagePlaceholder & { isInCart: boolean })[];
   onSelectItem: (item: ImagePlaceholder) => void;
+  onAddToCart?: (item: ImagePlaceholder) => void;
+  onSuggestColors?: (item: ImagePlaceholder) => void;
+  isSuggestionLoading?: boolean;
 }
 
 export function CatalogPanel({
   items,
   onSelectItem,
+  onAddToCart,
+  onSuggestColors,
+  isSuggestionLoading,
 }: CatalogPanelProps) {
   const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,7 +60,7 @@ export function CatalogPanel({
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="space-y-2 cursor-pointer group"
+                  className="space-y-2 cursor-pointer group relative"
                   onClick={() => onSelectItem(item)}
                   draggable
                   onDragStart={(e) => {
@@ -76,6 +82,32 @@ export function CatalogPanel({
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {/* Action buttons overlay */}
+                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSuggestColors?.(item);
+                          }}
+                          disabled={isSuggestionLoading}
+                          aria-label="Suggest colors"
+                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
+                        >
+                          🎨
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart?.(item);
+                          }}
+                          aria-label="Add to cart"
+                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
+                        >
+                          ➕
+                        </button>
+                      </div>
                     </div>
                   </Card>
                   <p className="text-xs font-medium text-center text-foreground truncate px-1">
