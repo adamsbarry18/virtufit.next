@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PhotoUploadPanel } from "./photo-upload-panel";
-import { CatalogPanel } from "./catalog-panel";
-import { CartPanel } from "./cart-panel";
-import type { ImagePlaceholder } from "@/lib/placeholder-images";
-import { useI18n } from "@/context/i18n-context";
-import { Upload, Shirt, ShoppingCart } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PhotoUploadPanel } from './photo-upload-panel';
+import { CatalogPanel } from './catalog-panel';
+import { CartPanel } from './cart-panel';
+import type { ImagePlaceholder } from '@/lib/placeholder-images';
+import { useI18n } from '@/context/i18n-context';
+import { Upload, Shirt, ShoppingCart } from 'lucide-react';
 
 interface ControlPanelProps {
   onPhotoUpload: (file: File) => void;
@@ -23,10 +23,10 @@ interface ControlPanelProps {
   setActiveTab: (tab: string) => void;
 }
 
-export function ControlPanel({ 
-  onPhotoUpload, 
-  catalogItems, 
-  onAddToCart, 
+export function ControlPanel({
+  onPhotoUpload,
+  catalogItems,
+  onAddToCart,
   cartItems,
   onRemoveFromCart,
   onSuggestColors,
@@ -35,7 +35,7 @@ export function ControlPanel({
   onClearOutfit,
   onGenerateImage,
   activeTab,
-  setActiveTab
+  setActiveTab,
 }: ControlPanelProps) {
   const { t } = useI18n();
   return (
@@ -58,10 +58,10 @@ export function ControlPanel({
         <PhotoUploadPanel onPhotoUpload={onPhotoUpload} />
       </TabsContent>
       <TabsContent value="catalog" className="mt-4">
-        <CatalogPanel 
-          items={catalogItems} 
+        <CatalogPanel
+          items={catalogItems}
           onSelectItem={(item) => onGenerateImage(item)}
-          onAddToCart={onAddToCart} 
+          onAddToCart={onAddToCart}
           onSuggestColors={onSuggestColors}
           isSuggestionLoading={isSuggestionLoading}
         />

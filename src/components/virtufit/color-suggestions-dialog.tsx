@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -7,12 +7,12 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import type { SuggestOutfitColorsOutput } from "@/ai/flows/suggest-outfit-colors";
-import type { ImagePlaceholder } from "@/lib/placeholder-images";
-import { useI18n } from "@/context/i18n-context";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import type { SuggestOutfitColorsOutput } from '@/ai/flows/suggest-outfit-colors';
+import type { ImagePlaceholder } from '@/lib/placeholder-images';
+import { useI18n } from '@/context/i18n-context';
+import { Badge } from '@/components/ui/badge';
 
 interface ColorSuggestionsDialogProps {
   isOpen: boolean;
@@ -20,7 +20,11 @@ interface ColorSuggestionsDialogProps {
   suggestions: (SuggestOutfitColorsOutput & { item: ImagePlaceholder }) | null;
 }
 
-export function ColorSuggestionsDialog({ isOpen, onOpenChange, suggestions }: ColorSuggestionsDialogProps) {
+export function ColorSuggestionsDialog({
+  isOpen,
+  onOpenChange,
+  suggestions,
+}: ColorSuggestionsDialogProps) {
   const { t } = useI18n();
 
   if (!suggestions) return null;
@@ -29,7 +33,9 @@ export function ColorSuggestionsDialog({ isOpen, onOpenChange, suggestions }: Co
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{t('colorSuggestionTitle')} {`"${suggestions.item.description}"`}</DialogTitle>
+          <DialogTitle>
+            {t('colorSuggestionTitle')} {`"${suggestions.item.description}"`}
+          </DialogTitle>
           <DialogDescription>
             {t('explanation')} {suggestions.explanation}
           </DialogDescription>

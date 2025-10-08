@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { LanguageSwitcher } from "./language-switcher";
-import { useI18n } from "@/context/i18n-context";
-import { SettingsDialog } from "@/components/virtufit/settings-dialog";
+import { LanguageSwitcher } from './language-switcher';
+import { useI18n } from '@/context/i18n-context';
+import { SettingsDialog } from '@/components/virtufit/settings-dialog';
 
 export function Header() {
   const { t } = useI18n();
@@ -18,11 +18,9 @@ export function Header() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                  {t("appName")}
+                  {t('appName')}
                 </h1>
-                <p className="text-sm text-muted-foreground font-medium">
-                  {t("tagline")}
-                </p>
+                <p className="text-sm text-muted-foreground font-medium">{t('tagline')}</p>
               </div>
             </div>
           </div>

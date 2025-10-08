@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -33,7 +33,7 @@ export function useAISettings() {
   }, [settings]);
 
   const updateSettings = (newSettings: Partial<AISettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings((prev) => ({ ...prev, ...newSettings }));
   };
 
   return {
@@ -41,6 +41,6 @@ export function useAISettings() {
     updateSettings,
     isConfigured: (provider: AIProvider) => {
       return settings.provider === provider && settings.apiKey.trim() !== '';
-    }
+    },
   };
 }

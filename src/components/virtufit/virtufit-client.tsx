@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { CatalogPanel } from './catalog-panel';
 import { ImagePanel } from './image-panel';
 import { useAISettings } from '@/hooks/use-ai-settings';
@@ -27,15 +28,24 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
   const [catalogItems, setCatalogItems] = useState<ImagePlaceholder[]>(initialCatalogItems || []);
   const [catalogUrl, setCatalogUrl] = useState<string>('');
   const [showGuide, setShowGuide] = useState(true);
-  
+
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { toast } = useToast();
   const { t } = useI18n();
   const { settings } = useAISettings();
 
-  const colors = ["#ff5733", "#3357ff", "#33ff57", "#f3ff33", "#ff33f3", "#33fff3", "#000000", "#ffffff"];
-  
+  const colors = [
+    '#ff5733',
+    '#3357ff',
+    '#33ff57',
+    '#f3ff33',
+    '#ff33f3',
+    '#33fff3',
+    '#000000',
+    '#ffffff',
+  ];
+
   const handlePhotoUpload = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -50,86 +60,89 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
     reader.readAsDataURL(file);
   };
 
-  const handleGenerateImage = useCallback(async (itemToTryOn: ImagePlaceholder, newColor?: string) => {
-    if (!userImageDataUri) {
-      toast({
-        variant: 'destructive',
-        title: t('errorTitle'),
-        description: t('uploadPrompt'),
-      });
-      return;
-    }
-    
-    const itemsForModel = itemToTryOn ? [itemToTryOn] : itemsOnModel;
-    if (itemsForModel.length === 0) {
-      toast({
-        variant: 'destructive',
-        title: t('errorTitle'),
-        description: "Please select an item to try on first.",
-      });
-      return;
-    }
-    
-    setIsLoading(true);
-    if (!newColor) {
-      setGeneratedImage(null); 
-    }
-    if (itemToTryOn) {
-      setItemsOnModel([itemToTryOn]);
-    }
-
-    try {
-      const clothingItemDataUris = await Promise.all(
-        itemsForModel.map(item => imageUrlToDataUrl(item.imageUrl))
-      );
-      
-      const validUris = clothingItemDataUris.filter((uri): uri is string => !!uri);
-
-      if (validUris.length !== itemsForModel.length) {
-         throw new Error(`Could not convert all images.`);
+  const handleGenerateImage = useCallback(
+    async (itemToTryOn: ImagePlaceholder, newColor?: string) => {
+      if (!userImageDataUri) {
+        toast({
+          variant: 'destructive',
+          title: t('errorTitle'),
+          description: t('uploadPrompt'),
+        });
+        return;
       }
-      
-      const result = await generateTryOnImage({
-        photoDataUri: userImageDataUri,
-        clothingItemDataUris: validUris,
-        provider: settings.provider,
-        apiKey: settings.apiKey,
-        newColor: newColor,
-      });
 
-      if (result.generatedImageDataUri) {
-        setGeneratedImage(result.generatedImageDataUri);
-      } else {
-        throw new Error('Generated image URI is empty.');
+      const itemsForModel = itemToTryOn ? [itemToTryOn] : itemsOnModel;
+      if (itemsForModel.length === 0) {
+        toast({
+          variant: 'destructive',
+          title: t('errorTitle'),
+          description: 'Please select an item to try on first.',
+        });
+        return;
       }
-    } catch (error) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: t('errorTitle'),
-        description: t('errorGeneratingImage'),
-      });
-      if(!newColor) {
-        setItemsOnModel([]);
+
+      setIsLoading(true);
+      if (!newColor) {
+        setGeneratedImage(null);
       }
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userImageDataUri, toast, t, itemsOnModel]);
+      if (itemToTryOn) {
+        setItemsOnModel([itemToTryOn]);
+      }
+
+      try {
+        const clothingItemDataUris = await Promise.all(
+          itemsForModel.map((item) => imageUrlToDataUrl(item.imageUrl))
+        );
+
+        const validUris = clothingItemDataUris.filter((uri): uri is string => !!uri);
+
+        if (validUris.length !== itemsForModel.length) {
+          throw new Error(`Could not convert all images.`);
+        }
+
+        const result = await generateTryOnImage({
+          photoDataUri: userImageDataUri,
+          clothingItemDataUris: validUris,
+          provider: settings.provider,
+          apiKey: settings.apiKey,
+          newColor: newColor,
+        });
+
+        if (result.generatedImageDataUri) {
+          setGeneratedImage(result.generatedImageDataUri);
+        } else {
+          throw new Error('Generated image URI is empty.');
+        }
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: 'destructive',
+          title: t('errorTitle'),
+          description: t('errorGeneratingImage'),
+        });
+        if (!newColor) {
+          setItemsOnModel([]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [userImageDataUri, toast, t, itemsOnModel, settings.provider, settings.apiKey]
+  );
 
   const handleClearOutfit = () => {
     setGeneratedImage(null);
     setItemsOnModel([]);
-  }
+  };
 
   const handleColorChange = (color: string) => {
     if (itemsOnModel.length > 0) {
       handleGenerateImage(itemsOnModel[0], color);
     } else {
-       toast({
+      toast({
         variant: 'destructive',
-        title: "No Item Selected",
-        description: "Please try on an item before changing its color.",
+        title: 'No Item Selected',
+        description: 'Please try on an item before changing its color.',
       });
     }
   };
@@ -149,17 +162,23 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
       const data = await res.json();
       if (!Array.isArray(data)) throw new Error('Catalog response is not an array');
       // Best-effort mapping to ImagePlaceholder shape
-      const mapped: ImagePlaceholder[] = data.map((p: any, idx: number) => ({
-        id: String(p.id ?? idx),
-        imageUrl: String(p.imageUrl ?? p.image?.src ?? p.thumbnail ?? ''),
-        description: String(p.description ?? p.title ?? 'Item'),
-        imageHint: p.imageHint ?? undefined,
-      })).filter((p: ImagePlaceholder) => p.imageUrl);
+      const mapped: ImagePlaceholder[] = data
+        .map((p: any, idx: number) => ({
+          id: String(p.id ?? idx),
+          imageUrl: String(p.imageUrl ?? p.image?.src ?? p.thumbnail ?? ''),
+          description: String(p.description ?? p.title ?? 'Item'),
+          imageHint: p.imageHint ?? undefined,
+        }))
+        .filter((p: ImagePlaceholder) => p.imageUrl);
       setCatalogItems(mapped);
       toast({ title: t('catalogLoaded'), description: `${mapped.length} ${t('itemsCount')}` });
     } catch (err) {
       console.error(err);
-      toast({ variant: 'destructive', title: t('catalogError'), description: (err as Error).message });
+      toast({
+        variant: 'destructive',
+        title: t('catalogError'),
+        description: (err as Error).message,
+      });
     }
   };
 
@@ -180,7 +199,9 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
             <div className="flex items-start gap-3 pr-8">
               <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <h3 className="font-bold text-sm mb-2 text-blue-900 dark:text-blue-100">{t('guideTitle')}</h3>
+                <h3 className="font-bold text-sm mb-2 text-blue-900 dark:text-blue-100">
+                  {t('guideTitle')}
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-800 dark:text-blue-200">
                   <div className="flex items-start gap-2">
                     <span>📸</span>
@@ -210,96 +231,98 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 md:p-6 flex-1 overflow-hidden">
-      {/* Left Panel - Sticky */}
-      <div className="flex flex-col gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto">
-        <div className="flex-shrink-0">
-          { userImage ? (
+        {/* Left Panel - Sticky */}
+        <div className="flex flex-col gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto">
+          <div className="flex-shrink-0">
+            {userImage ? (
               <ImagePanel
-              userImage={userImage}
-              generatedImage={generatedImage}
-              isLoading={isLoading}
-              onClearOutfit={handleClearOutfit}
-              onDropTryOn={(item) => handleGenerateImage(item)}
+                userImage={userImage}
+                generatedImage={generatedImage}
+                isLoading={isLoading}
+                onClearOutfit={handleClearOutfit}
+                onDropTryOn={(item) => handleGenerateImage(item)}
               />
-          ) : (
+            ) : (
               <PhotoUploadPanel onPhotoUpload={handlePhotoUpload} />
-          )}
-        </div>
-        <Card className="p-4 bg-gradient-to-br from-background to-muted/20 border-2">
-          <div className="flex items-center gap-2 mb-3">
-            <Paintbrush className="w-5 h-5 text-primary" />
-            <span className="text-sm font-semibold">{t('changeColor')}</span>
+            )}
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <Card className="p-4 bg-gradient-to-br from-background to-muted/20 border-2">
+            <div className="flex items-center gap-2 mb-3">
+              <Paintbrush className="w-5 h-5 text-primary" />
+              <span className="text-sm font-semibold">{t('changeColor')}</span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
               {colors.map((color) => (
-                  <Button 
-                      key={color} 
-                      style={{ backgroundColor: color }} 
-                      className="w-10 h-10 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform disabled:opacity-50"
-                      onClick={() => handleColorChange(color)}
-                      disabled={itemsOnModel.length === 0 || isLoading}
-                      aria-label={`Change color to ${color}`}
-                  />
-              ))}
-          </div>
-        </Card>
-
-        {/* Preview of selected/recent items */}
-        {catalogItems.length > 0 && (
-          <Card className="p-4 border-2">
-            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-              <Shirt className="w-4 h-4" />
-              {itemsOnModel.length > 0 ? t('selectedItems') : t('recentItems')}
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              {(itemsOnModel.length > 0 ? itemsOnModel : catalogItems.slice(0, 4)).map((item) => (
-                <div
-                  key={item.id}
-                  className="relative group cursor-pointer"
-                  onClick={() => handleGenerateImage(item)}
-                >
-                  <div className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-transparent group-hover:border-primary transition-all">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.description}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <p className="text-xs mt-1 truncate text-center">{item.description}</p>
-                </div>
+                <Button
+                  key={color}
+                  style={{ backgroundColor: color }}
+                  className="w-10 h-10 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform disabled:opacity-50"
+                  onClick={() => handleColorChange(color)}
+                  disabled={itemsOnModel.length === 0 || isLoading}
+                  aria-label={`Change color to ${color}`}
+                />
               ))}
             </div>
           </Card>
-        )}
-      </div>
 
-      {/* Right Panel - Scrollable */}
-      <div className="flex flex-col gap-4 h-full overflow-y-auto">
-        <Card className="p-5 bg-gradient-to-br from-primary/5 to-background border-2 flex-shrink-0">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold">🔗 {t('importFromWeb')}</span>
+          {/* Preview of selected/recent items */}
+          {catalogItems.length > 0 && (
+            <Card className="p-4 border-2">
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Shirt className="w-4 h-4" />
+                {itemsOnModel.length > 0 ? t('selectedItems') : t('recentItems')}
+              </h3>
+              <div className="grid grid-cols-2 gap-3">
+                {(itemsOnModel.length > 0 ? itemsOnModel : catalogItems.slice(0, 4)).map((item) => (
+                  <div
+                    key={item.id}
+                    className="relative group cursor-pointer"
+                    onClick={() => handleGenerateImage(item)}
+                  >
+                    <div className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-transparent group-hover:border-primary transition-all">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.description}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <p className="text-xs mt-1 truncate text-center">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+        </div>
+
+        {/* Right Panel - Scrollable */}
+        <div className="flex flex-col gap-4 h-full overflow-y-auto">
+          <Card className="p-5 bg-gradient-to-br from-primary/5 to-background border-2 flex-shrink-0">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-base font-bold">🔗 {t('importFromWeb')}</span>
+              </div>
+              <span className="text-sm text-muted-foreground">{t('importFromWebSubtitle')}</span>
+              <div className="flex gap-2">
+                <Input
+                  placeholder={t('catalogUrlPlaceholder')}
+                  value={catalogUrl}
+                  onChange={(e) => setCatalogUrl(e.target.value)}
+                  className="flex-1"
+                />
+                <Button onClick={loadCatalog} variant="default" className="px-6">
+                  {t('loadCatalog')}
+                </Button>
+              </div>
             </div>
-            <span className="text-sm text-muted-foreground">{t('importFromWebSubtitle')}</span>
-            <div className="flex gap-2">
-              <Input 
-                placeholder={t('catalogUrlPlaceholder')}
-                value={catalogUrl}
-                onChange={(e) => setCatalogUrl(e.target.value)}
-                className="flex-1"
-              />
-              <Button onClick={loadCatalog} variant="default" className="px-6">{t('loadCatalog')}</Button>
-            </div>
-          </div>
-        </Card>
-        <CatalogPanel 
-          items={catalogItems.map(item => ({ ...item, isInCart: false }))} 
-          onSelectItem={(item) => handleGenerateImage(item)}
-        />
+          </Card>
+          <CatalogPanel
+            items={catalogItems.map((item) => ({ ...item, isInCart: false }))}
+            onSelectItem={(item) => handleGenerateImage(item)}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 }

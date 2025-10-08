@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,12 +10,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Settings } from "lucide-react";
-import { useI18n } from "@/context/i18n-context";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Settings } from 'lucide-react';
+import { useI18n } from '@/context/i18n-context';
 
 type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream';
 
@@ -49,11 +55,11 @@ export function SettingsDialog() {
   }, [settings]);
 
   const handleProviderChange = (provider: AIProvider) => {
-    setSettings(prev => ({ ...prev, provider }));
+    setSettings((prev) => ({ ...prev, provider }));
   };
 
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings(prev => ({ ...prev, apiKey: e.target.value }));
+    setSettings((prev) => ({ ...prev, apiKey: e.target.value }));
   };
 
   const handleSave = () => {
@@ -63,7 +69,11 @@ export function SettingsDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="border-2 border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-200 shadow-sm">
+        <Button
+          variant="outline"
+          size="icon"
+          className="border-2 border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-200 shadow-sm"
+        >
           <Settings className="h-4 w-4 text-primary" />
         </Button>
       </DialogTrigger>
@@ -73,9 +83,7 @@ export function SettingsDialog() {
             <Settings className="h-6 w-6 text-primary" />
             {t('settingsTitle')}
           </DialogTitle>
-          <DialogDescription className="text-base">
-            {t('settingsDescription')}
-          </DialogDescription>
+          <DialogDescription className="text-base">{t('settingsDescription')}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-2">
           <div className="space-y-3">
@@ -83,7 +91,10 @@ export function SettingsDialog() {
               {t('aiProvider')}
             </Label>
             <Select value={settings.provider} onValueChange={handleProviderChange}>
-              <SelectTrigger id="ai-provider" className="h-12 border-2 border-primary/20 hover:border-primary transition-all">
+              <SelectTrigger
+                id="ai-provider"
+                className="h-12 border-2 border-primary/20 hover:border-primary transition-all"
+              >
                 <SelectValue placeholder={t('providerSelect')} />
               </SelectTrigger>
               <SelectContent>

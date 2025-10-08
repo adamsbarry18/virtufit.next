@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export async function imageUrlToDataUrl(url: string): Promise<string> {
@@ -34,7 +34,8 @@ export async function imageUrlToDataUrl(url: string): Promise<string> {
     console.error('Image fetch failed, using fallback placeholder.', e);
     try {
       const fallbackRes = await fetch(fallbackUrl);
-      if (!fallbackRes.ok) throw new Error(`Fallback fetch failed: ${fallbackRes.status} ${fallbackRes.statusText}`);
+      if (!fallbackRes.ok)
+        throw new Error(`Fallback fetch failed: ${fallbackRes.status} ${fallbackRes.statusText}`);
       const blob = await fallbackRes.blob();
       return await blobToDataURL(blob);
     } catch (fallbackErr) {

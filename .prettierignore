@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+dist
+public
+.vscode
+.env
+.env.local
+*.log
