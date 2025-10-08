@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [main, dev]
 
-# Grant minimal permissions so GITHUB_TOKEN can push to GHCR
 permissions:
   contents: read
   packages: write
