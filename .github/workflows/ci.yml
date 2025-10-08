@@ -72,12 +72,10 @@ jobs:
     name: Deploy to Vercel
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Clean Vercel cache/config
-        run: rm -rf .vercel
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
