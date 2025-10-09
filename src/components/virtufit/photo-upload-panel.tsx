@@ -88,7 +88,7 @@ export function PhotoUploadPanel({ onPhotoUpload }: PhotoUploadPanelProps) {
     <div className="flex flex-col h-full min-h-[400px]">
       {!usingCamera && (
         <div
-          className="flex-grow flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl cursor-pointer hover:border-primary hover:bg-gradient-to-br hover:from-primary/5 hover:to-primary/10 transition-all duration-300 bg-gradient-to-br from-muted/30 to-muted/10"
+          className="flex-grow flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl cursor-pointer hover:border-primary hover:bg-white transition-all duration-300 bg-white shadow-sm"
           onClick={handleUploadAreaClick}
         >
           <div className="text-center">

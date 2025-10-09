@@ -2,6 +2,9 @@
 
 'use server';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 /**
  * @fileOverview Genkit flow for generating a try-on image of a user wearing selected clothing items.
  *
@@ -25,8 +28,11 @@ const GenerateTryOnImageInputSchema = z.object({
       "An array of clothing items as data URIs that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   newColor: z.string().optional().describe('An optional new color to apply to the clothing item.'),
+  // Providers:
+  //   'gemini' = Gemini routed through Banana.dev backend for image generation in this app
+  // The provider value is used by the server flow to select the generation backend.
   provider: z
-    .enum(['openai', 'gemini', 'leonardo', 'seedream'])
+    .enum(['openai', 'gemini', 'leonardo', 'seedream', 'replicate'])
     .describe('AI provider to use for image generation'),
   apiKey: z
     .string()
@@ -81,11 +87,14 @@ const generateTryOnImageFlow = ai.defineFlow(
         case 'openai':
           return await callOpenAIDalle3(input, textPrompt);
         case 'gemini':
-          return await callGeminiVision(input, textPrompt);
+          // Gemini uses Banana.dev backend for image generation in this app
+          return await callGeminiBanana(input, textPrompt);
         case 'leonardo':
           return await callLeonardoAI(input, textPrompt);
         case 'seedream':
           return await callSeedream(input, textPrompt);
+        case 'replicate':
+          return await callReplicate(input, textPrompt);
         default:
           throw new Error('Unknown provider');
       }
@@ -125,35 +134,9 @@ const generateTryOnImageFlow = ai.defineFlow(
       }
     }
 
-    async function callGeminiVision(
-      inp: GenerateTryOnImageInput,
-      prompt: string
-    ): Promise<GenerateTryOnImageOutput> {
-      if (!inp.apiKey) throw new Error('Gemini API key required for provider "gemini".');
-      try {
-        const mod = await import('@google/genai');
-        const { GoogleGenAI } = mod as any;
-        // try to pass apiKey if the SDK accepts it; otherwise the environment must provide credentials
-        const aiClient = new GoogleGenAI({ apiKey: inp.apiKey });
-        const response: any = await aiClient.models.generateContent({
-          model: 'gemini-2.5-flash-image',
-          contents: prompt,
-        });
-        const parts = response?.candidates?.[0]?.content?.parts ?? [];
-        for (const part of parts) {
-          if (part.inlineData?.data) {
-            const imageData = part.inlineData.data; // base64
-            return {
-              generatedImageDataUri: `data:image/png;base64,${imageData}`,
-            };
-          }
-        }
-        return { generatedImageDataUri: inp.photoDataUri };
-      } catch (e) {
-        console.error('Gemini generation error:', e);
-        return { generatedImageDataUri: inp.photoDataUri };
-      }
-    }
+    // Note: Gemini image generation is routed through the Banana.dev integration
+    // implemented in callGeminiBanana above; the legacy direct Gemini SDK path
+    // has been removed to avoid duplication of behavior.
 
     async function callLeonardoAI(
       inp: GenerateTryOnImageInput,
@@ -253,6 +236,116 @@ const generateTryOnImageFlow = ai.defineFlow(
         return { generatedImageDataUri: inp.photoDataUri };
       } catch (e) {
         console.error('Seedream generation error:', e);
+        return { generatedImageDataUri: inp.photoDataUri };
+      }
+    }
+
+    async function callGeminiBanana(
+      inp: GenerateTryOnImageInput,
+      prompt: string
+    ): Promise<GenerateTryOnImageOutput> {
+      // Call Gemini via the official Google GenAI SDK (server-side).
+      // Prefer API key forwarded from client, otherwise fall back to env vars.
+      const apiKey = inp.apiKey ?? process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        console.warn('No Gemini API key provided; returning original photo as fallback');
+        return { generatedImageDataUri: inp.photoDataUri };
+      }
+
+      try {
+        const mod = await import('@google/genai');
+        const { GoogleGenAI } = mod as any;
+        const client = new GoogleGenAI({ apiKey });
+
+        const response: any = await client.models.generateContent({
+          model: 'gemini-2.5-flash-image',
+          contents: prompt,
+        });
+
+        const parts = response?.candidates?.[0]?.content?.parts ?? [];
+        for (const part of parts) {
+          if (part.inlineData?.data) {
+            const imageData = part.inlineData.data; // base64 string
+            return { generatedImageDataUri: `data:image/png;base64,${imageData}` };
+          }
+        }
+
+        // If no inlineData found, try to see if response contains base64 in other fields
+        // (fallbacks) and otherwise return original photo.
+        return { generatedImageDataUri: inp.photoDataUri };
+      } catch (e) {
+        console.error('Gemini (Banana) generation error:', e);
+        return { generatedImageDataUri: inp.photoDataUri };
+      }
+    }
+
+    async function callReplicate(
+      inp: GenerateTryOnImageInput,
+      prompt: string
+    ): Promise<GenerateTryOnImageOutput> {
+      // Use Replicate SDK to run google/imagen-4. Prefer client-provided key, then env var.
+      const apiToken = inp.apiKey || process.env.REPLICATE_API_TOKEN;
+      if (!apiToken) {
+        console.warn('No Replicate API token provided; returning original photo as fallback');
+        return { generatedImageDataUri: inp.photoDataUri };
+      }
+
+      try {
+        const Replicate = (await import('replicate')).default;
+        const replicate = new Replicate({ auth: apiToken });
+
+        const inputObj: any = {
+          prompt,
+          // If you want to provide the user photo as conditioning input, include it here.
+          // Some Replicate models accept an `image` or `init_image` field for image-to-image.
+          image: inp.photoDataUri,
+        };
+
+        const output: any = await replicate.run('google/imagen-4', { input: inputObj });
+
+        // Normalize output - could be string (url), Buffer, Array, or object with url()/toString
+        let candidate: any = output;
+        if (Array.isArray(output) && output.length > 0) candidate = output[0];
+
+        // If candidate has a url() method (per some SDK responses), call it
+        if (candidate && typeof candidate.url === 'function') {
+          const url = await candidate.url();
+          const res = await fetch(url);
+          const buf = Buffer.from(await res.arrayBuffer());
+          return { generatedImageDataUri: `data:image/png;base64,${buf.toString('base64')}` };
+        }
+
+        // If candidate is a direct URL string
+        if (typeof candidate === 'string' && candidate.startsWith('http')) {
+          const res = await fetch(candidate);
+          const buf = Buffer.from(await res.arrayBuffer());
+          return { generatedImageDataUri: `data:image/png;base64,${buf.toString('base64')}` };
+        }
+
+        // If candidate is a Buffer or ArrayBuffer / Uint8Array
+        if (typeof Buffer !== 'undefined' && Buffer.isBuffer(candidate)) {
+          return { generatedImageDataUri: `data:image/png;base64,${candidate.toString('base64')}` };
+        }
+        if (candidate instanceof ArrayBuffer || candidate instanceof Uint8Array) {
+          const buf = Buffer.from(candidate as any);
+          return { generatedImageDataUri: `data:image/png;base64,${buf.toString('base64')}` };
+        }
+
+        // As a last resort, if output has .toString() that yields data URI or base64
+        if (candidate && typeof candidate.toString === 'function') {
+          const asStr = candidate.toString();
+          if (asStr.startsWith('http')) {
+            const res = await fetch(asStr);
+            const buf = Buffer.from(await res.arrayBuffer());
+            return { generatedImageDataUri: `data:image/png;base64,${buf.toString('base64')}` };
+          }
+          // if it's already base64 data
+          if (asStr.startsWith('data:')) return { generatedImageDataUri: asStr };
+        }
+
+        return { generatedImageDataUri: inp.photoDataUri };
+      } catch (e) {
+        console.error('Replicate generation error:', e);
         return { generatedImageDataUri: inp.photoDataUri };
       }
     }

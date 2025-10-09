@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
+'use client';
 
 import React, { useState, useCallback } from 'react';
 import { CatalogPanel } from './catalog-panel';
@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { PhotoUploadPanel } from './photo-upload-panel';
 import { Input } from '../ui/input';
-import { Paintbrush, Info, X, Shirt } from 'lucide-react';
+import { Paintbrush, Info, X } from 'lucide-react';
 
 interface VirtuFitClientProps {
   catalogItems: ImagePlaceholder[];
@@ -127,12 +127,14 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
         setIsLoading(false);
       }
     },
-    [userImageDataUri, toast, t, itemsOnModel, settings.provider, settings.apiKey]
+    [userImageDataUri, toast, t, itemsOnModel, settings.provider, settings.apiKey, setGeneratedImage]
   );
 
   const handleClearOutfit = () => {
     setGeneratedImage(null);
     setItemsOnModel([]);
+    setUserImage(null);
+    setUserImageDataUri(null);
   };
 
   const handleColorChange = (color: string) => {
@@ -229,94 +231,80 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
         </Card>
       )}
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 md:p-6 flex-1 overflow-hidden">
-        {/* Left Panel - Sticky */}
-        <div className="flex flex-col gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto">
-          <div className="flex-shrink-0">
-            {userImage ? (
-              <ImagePanel
-                userImage={userImage}
-                generatedImage={generatedImage}
-                isLoading={isLoading}
-                onClearOutfit={handleClearOutfit}
-                onDropTryOn={(item) => handleGenerateImage(item)}
-              />
-            ) : (
-              <PhotoUploadPanel onPhotoUpload={handlePhotoUpload} />
-            )}
+      {/* Sticky Top: Upload + Change Color (full-width) */}
+      <div className="sticky top-0 z-30 bg-background/60 backdrop-blur-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4 md:p-6">
+          <div className="lg:col-span-2">
+            <PhotoUploadPanel onPhotoUpload={handlePhotoUpload} />
           </div>
-          <Card className="p-4 bg-gradient-to-br from-background to-muted/20 border-2">
-            <div className="flex items-center gap-2 mb-3">
-              <Paintbrush className="w-5 h-5 text-primary" />
-              <span className="text-sm font-semibold">{t('changeColor')}</span>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {colors.map((color) => (
-                <Button
-                  key={color}
-                  style={{ backgroundColor: color }}
-                  className="w-10 h-10 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform disabled:opacity-50"
-                  onClick={() => handleColorChange(color)}
-                  disabled={itemsOnModel.length === 0 || isLoading}
-                  aria-label={`Change color to ${color}`}
-                />
-              ))}
-            </div>
-          </Card>
-
-          {/* Preview of selected/recent items */}
-          {catalogItems.length > 0 && (
-            <Card className="p-4 border-2">
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Shirt className="w-4 h-4" />
-                {itemsOnModel.length > 0 ? t('selectedItems') : t('recentItems')}
-              </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {(itemsOnModel.length > 0 ? itemsOnModel : catalogItems.slice(0, 4)).map((item) => (
-                  <div
-                    key={item.id}
-                    className="relative group cursor-pointer"
-                    onClick={() => handleGenerateImage(item)}
-                  >
-                    <div className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-transparent group-hover:border-primary transition-all">
-                      <img
-                        src={item.imageUrl}
-                        alt={item.description}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <p className="text-xs mt-1 truncate text-center">{item.description}</p>
-                  </div>
+          <div className="lg:col-span-1 flex items-start">
+            <Card className="w-full p-4 bg-white border-2 shadow-md">
+              <div className="flex items-center gap-2 mb-3">
+                <Paintbrush className="w-5 h-5 text-primary" />
+                <span className="text-sm font-semibold">{t('changeColor')}</span>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {colors.map((color) => (
+                  <Button
+                    key={color}
+                    style={{ backgroundColor: color }}
+                    className="w-10 h-10 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform disabled:opacity-50"
+                    onClick={() => handleColorChange(color)}
+                    disabled={itemsOnModel.length === 0 || isLoading}
+                    aria-label={`Change color to ${color}`}
+                  />
                 ))}
               </div>
             </Card>
-          )}
+          </div>
         </div>
+      </div>
 
-        {/* Right Panel - Scrollable */}
-        <div className="flex flex-col gap-4 h-full overflow-y-auto">
-          <Card className="p-5 bg-gradient-to-br from-primary/5 to-background border-2 flex-shrink-0">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-base font-bold">🔗 {t('importFromWeb')}</span>
-              </div>
-              <span className="text-sm text-muted-foreground">{t('importFromWebSubtitle')}</span>
-              <div className="flex gap-2">
-                <Input
-                  placeholder={t('catalogUrlPlaceholder')}
-                  value={catalogUrl}
-                  onChange={(e) => setCatalogUrl(e.target.value)}
-                  className="flex-1"
-                />
-                <Button onClick={loadCatalog} variant="default" className="px-6">
-                  {t('loadCatalog')}
-                </Button>
-              </div>
+      {/* Import from Web (fixed, non-scrollable) */}
+      <div className="mx-4 md:mx-6 my-4">
+        <Card className="p-5 bg-gradient-to-br from-primary/5 to-background border-2 shadow-lg">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-base font-bold">🔗 {t('importFromWeb')}</span>
             </div>
-          </Card>
+            <span className="text-sm text-muted-foreground">{t('importFromWebSubtitle')}</span>
+            <div className="flex gap-2">
+              <Input
+                placeholder={t('catalogUrlPlaceholder')}
+                value={catalogUrl}
+                onChange={(e) => setCatalogUrl(e.target.value)}
+                className="flex-1 bg-white"
+              />
+              <Button onClick={loadCatalog} variant="default" className="px-6">
+                {t('loadCatalog')}
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto p-4 md:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left: Image Panel */}
+          <div className="flex flex-col gap-4">
+            <ImagePanel
+              userImage={userImage}
+              generatedImage={generatedImage}
+              isLoading={isLoading}
+              onClearOutfit={handleClearOutfit}
+              onDropTryOn={(item) => handleGenerateImage(item)}
+            />
+          </div>
+          {/* Right: Empty for now */}
+          <div className="flex flex-col gap-4">
+          </div>
+        </div>
+      </div>
+
+      {/* Full-width Catalog at bottom */}
+      <div className="p-4 md:p-6">
+        <div className="max-h-[60vh] overflow-auto">
           <CatalogPanel
             items={catalogItems.map((item) => ({ ...item, isInCart: false }))}
             onSelectItem={(item) => handleGenerateImage(item)}

@@ -45,8 +45,11 @@ export const translations = {
     providerGemini: 'Google Gemini',
     providerLeonardo: 'Leonardo AI',
     providerSeedream: 'Seedream 4.0',
+    providerReplicate: 'Replicate',
     settingsSave: 'Save',
     settingsNote: 'Your API key is stored only in your browser.',
+    advancedSettings: 'AI Model',
+    aiSettingsMenu: 'AI Settings',
 
     // Color Suggestions
     suggestColor: 'Suggest Colors',
@@ -146,8 +149,11 @@ export const translations = {
     providerGemini: 'Google Gemini',
     providerLeonardo: 'Leonardo AI',
     providerSeedream: 'Seedream 4.0',
+    providerReplicate: 'Replicate',
     settingsSave: 'Enregistrer',
     settingsNote: 'Votre clé API est stockée uniquement dans votre navigateur.',
+    advancedSettings: 'Modèle IA',
+    aiSettingsMenu: 'Paramètres IA',
 
     // Color Suggestions
     suggestColor: 'Suggérer des couleurs',

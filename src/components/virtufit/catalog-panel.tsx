@@ -6,23 +6,23 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { useI18n } from '@/context/i18n-context';
-import { Shirt, Search } from 'lucide-react';
+import { Shirt, Search, Star } from 'lucide-react';
 
-interface CatalogPanelProps {
-  items: (ImagePlaceholder & { isInCart: boolean })[];
-  onSelectItem: (item: ImagePlaceholder) => void;
-  onAddToCart?: (item: ImagePlaceholder) => void;
-  onSuggestColors?: (item: ImagePlaceholder) => void;
-  isSuggestionLoading?: boolean;
+interface CatalogItem extends ImagePlaceholder {
+  price?: string;
+  badge?: string;
+  rating?: number;
+  reviews?: number;
+  seller?: string;
+  url?: string;
 }
 
-export function CatalogPanel({
-  items,
-  onSelectItem,
-  onAddToCart,
-  onSuggestColors,
-  isSuggestionLoading,
-}: CatalogPanelProps) {
+interface CatalogPanelProps {
+  items: (CatalogItem & { isInCart: boolean })[];
+  onSelectItem: (item: ImagePlaceholder) => void;
+}
+
+export function CatalogPanel({ items, onSelectItem }: CatalogPanelProps) {
   const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -56,63 +56,73 @@ export function CatalogPanel({
               <p className="text-sm">{t('noItemsFound')}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="space-y-2 cursor-pointer group relative"
+                  className="group cursor-pointer"
                   onClick={() => onSelectItem(item)}
                   draggable
                   onDragStart={(e) => {
-                    // Custom drag payload for VirtuFit items
                     e.dataTransfer.setData('application/x-virtufit-item', JSON.stringify(item));
-                    // Fallback text/uri for broader compatibility
                     e.dataTransfer.setData('text/plain', item.imageUrl);
                     e.dataTransfer.effectAllowed = 'copy';
                   }}
                 >
-                  <Card className="overflow-hidden transition-all group-hover:ring-2 group-hover:ring-primary group-hover:shadow-lg">
-                    <div className="aspect-square bg-muted relative">
+                  <div className="rounded-lg overflow-hidden bg-white border shadow-sm">
+                    {/* Badge */}
+                    {item.badge && (
+                      <div className="absolute mt-3 ml-3 z-10">
+                        <span className="inline-block bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                          {item.badge}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Image */}
+                    <div className="relative aspect-[3/4] bg-muted overflow-hidden">
                       <img
                         src={item.imageUrl}
                         alt={item.description}
-                        className="object-cover w-full h-full transition-transform group-hover:scale-105"
-                        data-ai-hint={item.imageHint}
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
                         loading="lazy"
                         referrerPolicy="no-referrer"
+                        style={{ minHeight: 170 }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      {/* Action buttons overlay */}
-                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onSuggestColors?.(item);
-                          }}
-                          disabled={isSuggestionLoading}
-                          aria-label="Suggest colors"
-                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
-                        >
-                          🎨
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onAddToCart?.(item);
-                          }}
-                          aria-label="Add to cart"
-                          className="p-1 bg-white/90 rounded shadow-sm text-xs"
-                        >
-                          ➕
-                        </button>
+                    </div>
+
+                    {/* Meta */}
+                    <div className="p-3">
+                      <div className="text-sm font-semibold text-foreground truncate">
+                        {item.seller ?? 'Brand'}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1 truncate">
+                        {item.description}
+                      </div>
+
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center gap-2">
+                          {typeof item.rating === 'number' ? (
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 text-amber-400" />
+                              <span className="text-xs font-medium">{item.rating.toFixed(1)}</span>
+                              {typeof item.reviews === 'number' && (
+                                <span className="text-xs text-muted-foreground">
+                                  ({item.reviews})
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="text-xs text-muted-foreground">
+                              {item.url ? 'Online' : ''}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-sm font-bold text-foreground">{item.price ?? ''}</div>
                       </div>
                     </div>
-                  </Card>
-                  <p className="text-xs font-medium text-center text-foreground truncate px-1">
-                    {item.description}
-                  </p>
+                  </div>
                 </div>
               ))}
             </div>

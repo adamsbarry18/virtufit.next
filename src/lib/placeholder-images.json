@@ -1,40 +1,184 @@
 {
   "placeholderImages": [
     {
-      "id": "item-tshirt-black",
-      "description": "Stylish Black T-Shirt",
-      "imageUrl": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
-      "imageHint": "black t-shirt"
+      "id": "item-1",
+      "description": "Placeholder image 1",
+      "imageUrl": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/6f5fdf2ab2f8990391936ee22dbde735.jpg",
+      "imageHint": "virtual model matting"
     },
     {
-      "id": "item-denim-jacket",
-      "description": "Classic Denim Jacket",
-      "imageUrl": "https://placehold.co/987x987?text=Denim%20Jacket",
-      "imageHint": "denim jacket"
+      "id": "item-2",
+      "description": "Placeholder image 2",
+      "imageUrl": "https://lafrenchtouch.co/wp-content/uploads/2020/10/pulls-originaux-501x600.jpg.webp",
+      "imageHint": "pulls originaux"
     },
     {
-      "id": "item-summer-dress",
-      "description": "Vibrant Summer Dress",
-      "imageUrl": "https://placehold.co/987x987?text=Summer%20Dress",
-      "imageHint": "red dress"
+      "id": "item-3",
+      "description": "Placeholder image 3",
+      "imageUrl": "https://www.cocorico.store/cdn/shop/files/INTE-COEUR-MARINE.jpg?v=1720099111&width=1056",
+      "imageHint": "inte coeur marine"
     },
     {
-      "id": "item-cozy-sweater",
-      "description": "Cozy Knit Sweater",
-      "imageUrl": "https://placehold.co/987x987?text=Knit%20Sweater",
-      "imageHint": "knit sweater"
+      "id": "item-4",
+      "description": "Placeholder image 4",
+      "imageUrl": "https://www.cocorico.store/cdn/shop/files/INTE-COEUR-BLANC.jpg?v=1720099044&width=1056",
+      "imageHint": "inte coeur blanc"
     },
     {
-      "id": "item-formal-blazer",
-      "description": "Formal Blue Blazer",
-      "imageUrl": "https://placehold.co/987x987?text=Blue%20Blazer",
-      "imageHint": "blue blazer"
+      "id": "item-5",
+      "description": "Placeholder image 5",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRFRWG2JEW9f-CBkzNkhmgGKx0unTmYO1BCg&s",
+      "imageHint": "google thumbnail 1"
     },
     {
-      "id": "item-biker-jacket",
-      "description": "Leather Biker Jacket",
-      "imageUrl": "https://placehold.co/987x987?text=Biker%20Jacket",
-      "imageHint": "leather jacket"
+      "id": "item-6",
+      "description": "Placeholder image 6",
+      "imageUrl": "https://www.marquesavenue.com/media/cache/wishibam_shop_product_thumbnail/22/b5/7897d4a520b031f4d89d3cc51a20.jpg",
+      "imageHint": "product thumbnail"
+    },
+    {
+      "id": "item-7",
+      "description": "Placeholder image 7",
+      "imageUrl": "https://www.faubourgsaintsulpice.fr/wp-content/uploads/2018/04/5-12.jpg",
+      "imageHint": "faubourg saint sulpice"
+    },
+    {
+      "id": "item-8",
+      "description": "Placeholder image 8",
+      "imageUrl": "https://m.media-amazon.com/images/I/51mNW-aaeNL._UY1000_.jpg",
+      "imageHint": "amazon image"
+    },
+    {
+      "id": "item-9",
+      "description": "Placeholder image 9",
+      "imageUrl": "https://www.itailor.fr/images/product/shirt/it697-2.png",
+      "imageHint": "itailor shirt"
+    },
+    {
+      "id": "item-10",
+      "description": "Placeholder image 10",
+      "imageUrl": "https://cdn.monsieurtshirt.com/images/97879/page_helmet/sous-vetements-homme.jpg?t=1719841382000",
+      "imageHint": "sous-vetements homme"
+    },
+    {
+      "id": "item-11",
+      "description": "Placeholder image 11",
+      "imageUrl": "https://images.cdn.inspogroup.net/WGvkQxQhgzFIGxH0IMdBQDnzp8dO-cnjBr6Rm55DOwM/g:ce/trim:10/h:440/w:330/czM6L/y9zdH/lsaWdodC1pbWctcHJvY2Vzc2luZy9waG90b2JveC80OTEzZjBhNGMxNGVhNDU1MmJjYWViZTQ0ZDkyNmY3OS5qcGc",
+      "imageHint": "inspogroup image"
+    },
+    {
+      "id": "item-12",
+      "description": "Placeholder image 12",
+      "imageUrl": "https://primedia.primark.com/i/primark/WK45%20-%20HBC%20-%20Mens%20-%20Coats%20%26%20Jackets",
+      "imageHint": "primark media"
+    },
+    {
+      "id": "item-13",
+      "description": "Placeholder image 13",
+      "imageUrl": "https://www.b-z-b.com/on/demandware.static/-/Sites-Bizzbee-master-catalog/default/dw3ff88ab0/images/2007184_16707_V2.jpg?frz-height=600&frz-width=400&frz-gravity=center",
+      "imageHint": "bizzbee product"
+    },
+    {
+      "id": "item-14",
+      "description": "Placeholder image 14",
+      "imageUrl": "https://cdn.laredoute.com/cdn-cgi/image/width=400,height=400,fit=pad,dpr=1/products/4/a/0/4a09445116db669a8dbd71eb7c8ba3fa.jpg",
+      "imageHint": "laredoute product"
+    },
+    {
+      "id": "item-15",
+      "description": "Placeholder image 15",
+      "imageUrl": "https://photos6.spartoo.com/photos/272/27218320/27218320_200_A.jpg",
+      "imageHint": "spartoo photo"
+    },
+    {
+      "id": "item-16",
+      "description": "Placeholder image 16",
+      "imageUrl": "https://images.hugoboss.com/is/image/boss/hbeu50549991_001_350?$large$=&fit=crop,1&align=1,1&bgcolor=ebebeb&lastModified=1758932178000&qlt=80&resMode=sharp2&wid=338",
+      "imageHint": "hugo boss"
+    },
+    {
+      "id": "item-17",
+      "description": "Placeholder image 17",
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0630/6532/5726/files/1000830-320-grey-melange-585.jpg?v=1747907552&width=400&height=515&crop=center",
+      "imageHint": "shopify image"
+    },
+    {
+      "id": "item-18",
+      "description": "Placeholder image 18",
+      "imageUrl": "https://www.bleudazur.com/vdi/wp-content/uploads/2023/02/vdi-vetements-femme-6-min.jpg",
+      "imageHint": "bleudazur"
+    },
+    {
+      "id": "item-19",
+      "description": "Placeholder image 19",
+      "imageUrl": "https://witt-gruppe-res.cloudinary.com/t_fr,$w_400,f_auto/p/101.00ZUK66552-005.036.jpg",
+      "imageHint": "witt gruppe"
+    },
+    {
+      "id": "item-20",
+      "description": "Placeholder image 20",
+      "imageUrl": "https://muune.fr/18831-m_home_default/culotte-taille-haute-coton-bio-ethique-bordeaux-nam-burgundy.jpg",
+      "imageHint": "muune culotte"
+    },
+    {
+      "id": "item-21",
+      "description": "Placeholder image 21",
+      "imageUrl": "https://api.doyougreen.com//storage/uploads/products/13/ensemble-sous-vetement-femme-de-marque_large.jpg",
+      "imageHint": "doyougreen"
+    },
+    {
+      "id": "item-22",
+      "description": "Placeholder image 22",
+      "imageUrl": "https://www.b-z-b.com/on/demandware.static/-/Sites-Bizzbee-master-catalog/default/dw4b742cc0/images/2005426_16630_V2.jpg?frz-height=600&frz-width=400&frz-gravity=center",
+      "imageHint": "bizzbee product 2"
+    },
+    {
+      "id": "item-23",
+      "description": "Placeholder image 23",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-yC16NpIVIEQiZyMlGKSZNjV0IBpKcIIfVA&s",
+      "imageHint": "google thumbnail 2"
+    },
+    {
+      "id": "item-24",
+      "description": "Placeholder image 24",
+      "imageUrl": "https://www.iqrashop.com/images/33898-vetement-femme-musulmane-voilee-turquie-hijab-chic-5.jpg",
+      "imageHint": "iqra shop"
+    },
+    {
+      "id": "item-25",
+      "description": "Placeholder image 25",
+      "imageUrl": "https://cdn.laredoute.com/cdn-cgi/image/width=400,height=400,fit=pad,dpr=1/products/e/0/a/e0a439958ba47da170412bfdc83e12d4.jpg",
+      "imageHint": "laredoute product 2"
+    },
+    {
+      "id": "item-26",
+      "description": "Placeholder image 26",
+      "imageUrl": "https://www.coindesfilles.fr/media/wysiwyg/vetement-basique-ete-femme.jpg",
+      "imageHint": "coin des filles"
+    },
+    {
+      "id": "item-27",
+      "description": "Placeholder image 27",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKR9kyT7sHc2tGf998IWCMRtfTv7aGSV536A&s",
+      "imageHint": "google thumbnail 3"
+    },
+    {
+      "id": "item-28",
+      "description": "Placeholder image 28",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhlo67EnH16QO2WAzQXnesexLYSkv2RKT9bk3mGukuY5Slpf6lmVz_bSxRAKV0m5SNrOo&usqp=CAU",
+      "imageHint": "google thumbnail 4"
+    },
+    {
+      "id": "item-29",
+      "description": "Placeholder image 29",
+      "imageUrl": "https://img.leboncoin.fr/api/v1/lbcpb1/images/67/12/08/671208c0525d0665c2af421a9cd23cafaa60337d.jpg?rule=ad-large",
+      "imageHint": "leboncoin"
+    },
+    {
+      "id": "item-30",
+      "description": "Placeholder image 30",
+      "imageUrl": "https://images.napali.app/global/element-products/all/default/large/eljjk00143_element,w_tegh_frt1.jpg",
+      "imageHint": "napali"
     }
   ]
 }

@@ -26,11 +26,8 @@ interface ControlPanelProps {
 export function ControlPanel({
   onPhotoUpload,
   catalogItems,
-  onAddToCart,
   cartItems,
   onRemoveFromCart,
-  onSuggestColors,
-  isSuggestionLoading,
   itemsOnModel,
   onClearOutfit,
   onGenerateImage,
@@ -61,9 +58,6 @@ export function ControlPanel({
         <CatalogPanel
           items={catalogItems}
           onSelectItem={(item) => onGenerateImage(item)}
-          onAddToCart={onAddToCart}
-          onSuggestColors={onSuggestColors}
-          isSuggestionLoading={isSuggestionLoading}
         />
       </TabsContent>
       <TabsContent value="cart" className="mt-4">
