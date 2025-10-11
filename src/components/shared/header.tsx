@@ -2,7 +2,7 @@
 
 import { LanguageSwitcher } from './language-switcher';
 import { useI18n } from '@/context/i18n-context';
-import { SettingsDialog } from '@/components/virtufit/settings-dialog';
+import { SettingsMenu } from '@/components/virtufit/settings-menu';
 
 export function Header() {
   const { t } = useI18n();
@@ -32,7 +32,7 @@ export function Header() {
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
             <LanguageSwitcher />
-            <SettingsDialog />
+            <SettingsMenu />
           </div>
         </div>
       </div>

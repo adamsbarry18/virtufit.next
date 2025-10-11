@@ -1,20 +1,28 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
+// This file is machine-generated - edit at your own risk.
 
-import React, { useState, useCallback } from 'react';
-import { CatalogPanel } from './catalog-panel';
+'use client';
+
+import React, { useState, useCallback, useMemo } from 'react';
 import { ImagePanel } from './image-panel';
-import { useAISettings } from '@/hooks/use-ai-settings';
+import { PhotoUploadPanel } from './photo-upload-panel';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { generateTryOnImage } from '@/ai/flows/generate-try-on-image';
+import {
+  suggestOutfitColors,
+  type SuggestOutfitColorsOutput,
+} from '@/ai/flows/suggest-outfit-colors';
 import { useToast } from '@/hooks/use-toast';
-import { imageUrlToDataUrl } from '@/lib/utils';
+import { imageUrlToDataUrl, cn } from '@/lib/utils';
 import { useI18n } from '@/context/i18n-context';
 import { Button } from '../ui/button';
-import { Card } from '../ui/card';
-import { PhotoUploadPanel } from './photo-upload-panel';
-import { Input } from '../ui/input';
-import { Paintbrush, Info, X, Shirt } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Loader2, Palette } from 'lucide-react';
+import { ColorPicker } from '../ui/color-picker';
+import { CatalogPanel } from './catalog-panel';
+import { UrlScraperPanel } from './url-scraper-panel';
+import { HowToUseCard } from './how-to-use-card';
+import { useAISettings } from '@/hooks/use-ai-settings';
+import { ColorSuggestionsDialog } from './color-suggestions-dialog';
 
 interface VirtuFitClientProps {
   catalogItems: ImagePlaceholder[];
@@ -25,25 +33,37 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
   const [userImageDataUri, setUserImageDataUri] = useState<string | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [itemsOnModel, setItemsOnModel] = useState<ImagePlaceholder[]>([]);
-  const [catalogItems, setCatalogItems] = useState<ImagePlaceholder[]>(initialCatalogItems || []);
-  const [catalogUrl, setCatalogUrl] = useState<string>('');
-  const [showGuide, setShowGuide] = useState(true);
+  const [dynamicCatalogItems, setDynamicCatalogItems] =
+    useState<ImagePlaceholder[]>(initialCatalogItems);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
+  const [isMoreScraping, setIsMoreScraping] = useState(false);
+
+  const [isSuggestionLoading, setIsSuggestionLoading] = useState(false);
+  const [colorSuggestions, setColorSuggestions] = useState<
+    (SuggestOutfitColorsOutput & { item: ImagePlaceholder }) | null
+  >(null);
+  const [isSuggestionDialogOpen, setIsSuggestionDialogOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>('');
 
   const { toast } = useToast();
   const { t } = useI18n();
   const { settings } = useAISettings();
 
-  const colors = [
-    '#ff5733',
-    '#3357ff',
-    '#33ff57',
-    '#f3ff33',
-    '#ff33f3',
-    '#33fff3',
+  // Couleurs prédéfinies pour un accès rapide
+  const quickColors = [
     '#000000',
-    '#ffffff',
+    '#FFFFFF',
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#FF00FF',
+    '#00FFFF',
+    '#FFA500',
+    '#800080',
   ];
 
   const handlePhotoUpload = (file: File) => {
@@ -58,6 +78,13 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
       }
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleClearPhoto = () => {
+    setUserImage(null);
+    setUserImageDataUri(null);
+    setGeneratedImage(null);
+    setItemsOnModel([]);
   };
 
   const handleGenerateImage = useCallback(
@@ -81,6 +108,15 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
         return;
       }
 
+      if (settings.provider !== 'gemini' && !settings.apiKey) {
+        toast({
+          variant: 'destructive',
+          title: 'API Key Required',
+          description: `Please enter an API key for ${settings.provider} in the settings.`,
+        });
+        return;
+      }
+
       setIsLoading(true);
       if (!newColor) {
         setGeneratedImage(null);
@@ -96,30 +132,40 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
 
         const validUris = clothingItemDataUris.filter((uri): uri is string => !!uri);
 
+        if (validUris.length === 0) {
+          throw new Error(
+            `Could not convert any clothing item images. Please check your internet connection and try again.`
+          );
+        }
+
         if (validUris.length !== itemsForModel.length) {
-          throw new Error(`Could not convert all images.`);
+          console.warn(
+            `Only ${validUris.length} out of ${itemsForModel.length} clothing item images could be converted.`
+          );
         }
 
         const result = await generateTryOnImage({
           photoDataUri: userImageDataUri,
           clothingItemDataUris: validUris,
+          newColor: newColor,
           provider: settings.provider,
           apiKey: settings.apiKey,
-          newColor: newColor,
         });
 
-        if (result.generatedImageDataUri) {
+        if (result.generatedImageDataUri && result.generatedImageDataUri !== userImageDataUri) {
           setGeneratedImage(result.generatedImageDataUri);
         } else {
-          throw new Error('Generated image URI is empty.');
+          throw new Error('Generated image URI is empty or the same as the original.');
         }
       } catch (error) {
         console.error(error);
+        const errorMessage = error instanceof Error ? error.message : t('errorGeneratingImage');
         toast({
           variant: 'destructive',
           title: t('errorTitle'),
-          description: t('errorGeneratingImage'),
+          description: errorMessage,
         });
+        setGeneratedImage(null);
         if (!newColor) {
           setItemsOnModel([]);
         }
@@ -127,16 +173,12 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
         setIsLoading(false);
       }
     },
-    [userImageDataUri, toast, t, itemsOnModel, settings.provider, settings.apiKey]
+    [userImageDataUri, toast, t, itemsOnModel, settings]
   );
-
-  const handleClearOutfit = () => {
-    setGeneratedImage(null);
-    setItemsOnModel([]);
-  };
 
   const handleColorChange = (color: string) => {
     if (itemsOnModel.length > 0) {
+      setSelectedColor(color);
       handleGenerateImage(itemsOnModel[0], color);
     } else {
       toast({
@@ -147,182 +189,224 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
     }
   };
 
-  // Loader for an external e-commerce page or JSON feed.
-  // If a page URL is provided, we POST it to /api/scrape to extract product images.
-  // Expected returned shape: Array of { id, imageUrl, description, imageHint }
-  const loadCatalog = async () => {
-    if (!catalogUrl) return;
+  const handleCustomColorChange = (color: string) => {
+    setSelectedColor(color);
+    handleColorChange(color);
+  };
+
+  const handleSuggestColors = useCallback(
+    async (item: ImagePlaceholder) => {
+      setIsSuggestionLoading(true);
+      try {
+        const result = await suggestOutfitColors({
+          clothingItem: item.description,
+          baseColor: item.imageHint.split(' ')[0] || 'neutral',
+        });
+        setColorSuggestions({ ...result, item });
+        setIsSuggestionDialogOpen(true);
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: 'destructive',
+          title: t('errorTitle'),
+          description: 'Could not get color suggestions.',
+        });
+      } finally {
+        setIsSuggestionLoading(false);
+      }
+    },
+    [t, toast]
+  );
+
+  const handleScrapeUrl = async (url: string) => {
+    setIsScraping(true);
+    setDynamicCatalogItems([]);
+    setSearchQuery('');
+
     try {
-      const res = await fetch('/api/scrape', {
+      const response = await fetch('/api/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: catalogUrl }),
+        body: JSON.stringify({ url }),
       });
-      if (!res.ok) throw new Error(`Failed to fetch catalog: ${res.status}`);
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error('Catalog response is not an array');
-      // Best-effort mapping to ImagePlaceholder shape
-      const mapped: ImagePlaceholder[] = data
-        .map((p: any, idx: number) => ({
-          id: String(p.id ?? idx),
-          imageUrl: String(p.imageUrl ?? p.image?.src ?? p.thumbnail ?? ''),
-          description: String(p.description ?? p.title ?? 'Item'),
-          imageHint: p.imageHint ?? undefined,
-        }))
-        .filter((p: ImagePlaceholder) => p.imageUrl);
-      setCatalogItems(mapped);
-      toast({ title: t('catalogLoaded'), description: `${mapped.length} ${t('itemsCount')}` });
-    } catch (err) {
-      console.error(err);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Scraping failed with status: ${response.status}`);
+      }
+
+      const scrapedItems: any[] = await response.json();
+
+      if (scrapedItems.length > 0) {
+        const newItems: ImagePlaceholder[] = scrapedItems.map((item, index) => ({
+          id: `scraped-${index}-${Date.now()}`,
+          description: item.description || 'Scraped Item',
+          imageUrl: item.imageUrl,
+          imageHint: item.imageHint || 'scraped item',
+          brand: item.seller || new URL(url).hostname.replace('www.', ''),
+          price: parseFloat(item.price?.replace(',', '.').replace(/[^0-9.-]+/g, '') || '0'),
+          rating: item.rating || Math.random() * (5 - 3.5) + 3.5,
+          reviews: Math.floor(Math.random() * 500),
+          status: item.badge?.toLowerCase().includes('new')
+            ? 'new'
+            : item.badge?.toLowerCase().includes('promo')
+            ? 'promo'
+            : null,
+          originalPrice: undefined, // This would require more complex logic
+        }));
+
+        setDynamicCatalogItems(newItems);
+        toast({
+          title: 'Success',
+          description: `Found ${newItems.length} items.`,
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'No items found',
+          description: 'Could not find any clothing items on the provided URL.',
+        });
+        setDynamicCatalogItems(initialCatalogItems); // Revert to default
+      }
+    } catch (error) {
+      console.error('Scraping error:', error);
       toast({
         variant: 'destructive',
-        title: t('catalogError'),
-        description: (err as Error).message,
+        title: t('errorTitle'),
+        description: (error as Error).message || 'Failed to extract items from the URL.',
       });
+      setDynamicCatalogItems(initialCatalogItems); // Revert to default
+    } finally {
+      setIsScraping(false);
+      setIsMoreScraping(false);
     }
   };
 
+  const handleLoadMore = () => {
+    // This functionality is more complex with cheerio and is not implemented in this version.
+    // We would need pagination logic which is highly site-specific.
+    toast({
+      title: 'Heads up!',
+      description: 'Load more is not supported with this scraping method yet.',
+    });
+  };
+
+  const handleClearScrapedItems = () => {
+    setDynamicCatalogItems(initialCatalogItems);
+    setSearchQuery('');
+  };
+
+  const filteredCatalogItems = useMemo(() => {
+    if (!searchQuery) {
+      return dynamicCatalogItems;
+    }
+    return dynamicCatalogItems.filter(
+      (item) =>
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.brand.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [dynamicCatalogItems, searchQuery]);
+
+  const hasDynamicItems = dynamicCatalogItems !== initialCatalogItems;
+
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      {/* User Guide Banner */}
-      {showGuide && (
-        <Card className="mx-4 mt-4 md:mx-6 md:mt-6 mb-0 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-800">
-          <div className="p-4 relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-6 w-6"
-              onClick={() => setShowGuide(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            <div className="flex items-start gap-3 pr-8">
-              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <h3 className="font-bold text-sm mb-2 text-blue-900 dark:text-blue-100">
-                  {t('guideTitle')}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-800 dark:text-blue-200">
-                  <div className="flex items-start gap-2">
-                    <span>📸</span>
-                    <span>{t('guideStep1')}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span>🔗</span>
-                    <span>{t('guideStep2')}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span>👔</span>
-                    <span>{t('guideStep3')}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span>🎨</span>
-                    <span>{t('guideStep4')}</span>
-                  </div>
-                </div>
-                <div className="mt-3 text-xs font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 px-3 py-1.5 rounded-md inline-block">
-                  💡 {t('guideNote')}
-                </div>
-              </div>
-            </div>
+    <div className="flex flex-col gap-6 py-8 px-4 mx-auto max-w-7xl">
+      <HowToUseCard />
+      <div className="w-full">
+        {!userImage ? (
+          <div className="bg-card border rounded-lg p-6 min-h-[30vh] flex flex-col items-center justify-center text-center">
+            <PhotoUploadPanel onPhotoUpload={handlePhotoUpload} />
           </div>
-        </Card>
-      )}
-
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 md:p-6 flex-1 overflow-hidden">
-        {/* Left Panel - Sticky */}
-        <div className="flex flex-col gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto">
-          <div className="flex-shrink-0">
-            {userImage ? (
-              <ImagePanel
-                userImage={userImage}
-                generatedImage={generatedImage}
-                isLoading={isLoading}
-                onClearOutfit={handleClearOutfit}
-                onDropTryOn={(item) => handleGenerateImage(item)}
-              />
-            ) : (
-              <PhotoUploadPanel onPhotoUpload={handlePhotoUpload} />
-            )}
-          </div>
-          <Card className="p-4 bg-gradient-to-br from-background to-muted/20 border-2">
-            <div className="flex items-center gap-2 mb-3">
-              <Paintbrush className="w-5 h-5 text-primary" />
-              <span className="text-sm font-semibold">{t('changeColor')}</span>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {colors.map((color) => (
-                <Button
-                  key={color}
-                  style={{ backgroundColor: color }}
-                  className="w-10 h-10 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform disabled:opacity-50"
-                  onClick={() => handleColorChange(color)}
-                  disabled={itemsOnModel.length === 0 || isLoading}
-                  aria-label={`Change color to ${color}`}
-                />
-              ))}
-            </div>
-          </Card>
-
-          {/* Preview of selected/recent items */}
-          {catalogItems.length > 0 && (
-            <Card className="p-4 border-2">
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Shirt className="w-4 h-4" />
-                {itemsOnModel.length > 0 ? t('selectedItems') : t('recentItems')}
-              </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {(itemsOnModel.length > 0 ? itemsOnModel : catalogItems.slice(0, 4)).map((item) => (
-                  <div
-                    key={item.id}
-                    className="relative group cursor-pointer"
-                    onClick={() => handleGenerateImage(item)}
-                  >
-                    <div className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-transparent group-hover:border-primary transition-all">
-                      <img
-                        src={item.imageUrl}
-                        alt={item.description}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ImagePanel
+              userImage={userImage}
+              generatedImage={generatedImage}
+              isLoading={isLoading}
+              onClearPhoto={handleClearPhoto}
+              onDropItem={handleGenerateImage}
+            />
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-lg">
+                  <Palette className="w-5 h-5" />
+                  <span className="font-semibold">{t('changeColor')}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Couleurs rapides */}
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Couleurs rapides</h4>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {quickColors.map((color) => (
+                      <Button
+                        key={color}
+                        style={{ backgroundColor: color }}
+                        className={cn(
+                          'w-8 h-8 rounded-full border-2 shadow-md disabled:opacity-50 focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                          selectedColor === color
+                            ? 'border-primary ring-2 ring-primary'
+                            : 'border-white'
+                        )}
+                        onClick={() => handleColorChange(color)}
+                        disabled={itemsOnModel.length === 0 || isLoading}
+                        aria-label={`Change color to ${color}`}
                       />
-                    </div>
-                    <p className="text-xs mt-1 truncate text-center">{item.description}</p>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </Card>
-          )}
-        </div>
+                </div>
 
-        {/* Right Panel - Scrollable */}
-        <div className="flex flex-col gap-4 h-full overflow-y-auto">
-          <Card className="p-5 bg-gradient-to-br from-primary/5 to-background border-2 flex-shrink-0">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-base font-bold">🔗 {t('importFromWeb')}</span>
-              </div>
-              <span className="text-sm text-muted-foreground">{t('importFromWebSubtitle')}</span>
-              <div className="flex gap-2">
-                <Input
-                  placeholder={t('catalogUrlPlaceholder')}
-                  value={catalogUrl}
-                  onChange={(e) => setCatalogUrl(e.target.value)}
-                  className="flex-1"
-                />
-                <Button onClick={loadCatalog} variant="default" className="px-6">
-                  {t('loadCatalog')}
-                </Button>
-              </div>
-            </div>
-          </Card>
-          <CatalogPanel
-            items={catalogItems.map((item) => ({ ...item, isInCart: false }))}
-            onSelectItem={(item) => handleGenerateImage(item)}
-          />
-        </div>
+                {/* Sélecteur de couleur personnalisé */}
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Couleur personnalisée</h4>
+                  <ColorPicker
+                    value={selectedColor}
+                    onChange={handleCustomColorChange}
+                    className="w-full"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
+
+      <div className="w-full space-y-6">
+        <UrlScraperPanel
+          onScrape={(url) => handleScrapeUrl(url)}
+          isScraping={isScraping}
+          onClear={handleClearScrapedItems}
+          hasDynamicItems={hasDynamicItems}
+        />
+        <CatalogPanel
+          items={filteredCatalogItems}
+          isLoading={isScraping}
+          onSelectItem={(item) => handleGenerateImage(item)}
+          onTryOnItem={(item) => handleGenerateImage(item)}
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+          onSuggestColors={handleSuggestColors}
+          isSuggestionLoading={isSuggestionLoading}
+        />
+        {hasDynamicItems && !isScraping && !isMoreScraping && filteredCatalogItems.length > 0 && (
+          <div className="flex justify-center">
+            <Button onClick={handleLoadMore} variant="outline">
+              {t('loadMore')}
+            </Button>
+          </div>
+        )}
+        {isMoreScraping && (
+          <div className="flex justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )}
+      </div>
+
+      <ColorSuggestionsDialog
+        isOpen={isSuggestionDialogOpen}
+        onOpenChange={setIsSuggestionDialogOpen}
+        suggestions={colorSuggestions}
+      />
     </div>
   );
 }

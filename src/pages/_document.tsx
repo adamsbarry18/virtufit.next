@@ -4,9 +4,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          {/* ...add global meta / fonts here if needed... */}
-        </Head>
+        <Head>{/* ...add global meta / fonts here if needed... */}</Head>
         <body>
           <Main />
           <NextScript />

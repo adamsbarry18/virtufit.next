@@ -1,9 +1,11 @@
+// This file is machine-generated - edit at your own risk.
+
 export const translations = {
   en: {
     // Header
     appName: 'VirtuFit',
     tagline: 'Virtual Try-On for E-Commerce',
-    aiPowered: 'AI-Powered Virtual Try-On',
+    aiPowered: 'AI Powered',
 
     // Language Switcher
     language: 'Language',
@@ -12,12 +14,18 @@ export const translations = {
 
     // Catalog Panel
     catalogTitle: 'Select an Item',
+    new: 'New',
+    promo: 'Promo',
+    catalogEmpty: 'The catalog is empty. Try scraping a URL or reloading.',
+    searchPlaceholder: 'Search items...',
+    noResults: 'No items match your search.',
+    tryOn: 'Try On',
     upload: 'Upload',
     catalog: 'Catalog',
     cart: 'Cart',
 
     // Image Panel
-    uploadPrompt: 'Click here to upload a photo and begin.',
+    uploadPrompt: 'Upload a photo to begin.',
     generating: 'Generating your look...',
     changeColor: 'Change Color',
 
@@ -34,19 +42,11 @@ export const translations = {
     or: 'OR',
     useCamera: 'Use Camera',
 
-    // Settings
-    settingsTitle: 'AI Settings',
-    settingsDescription:
-      'Configure the AI model for virtual try-on. Changes are saved automatically.',
-    aiProvider: 'AI Provider',
-    apiKey: 'API Key',
-    providerSelect: 'Select Provider',
-    providerOpenAI: 'OpenAI (DALL-E 3)',
-    providerGemini: 'Google Gemini',
-    providerLeonardo: 'Leonardo AI',
-    providerSeedream: 'Seedream 4.0',
-    settingsSave: 'Save',
-    settingsNote: 'Your API key is stored only in your browser.',
+    // Cart
+    cartTitle: 'Your Items',
+    cartSubtitle: 'Drag items onto your photo',
+    cartEmpty: 'Your cart is empty. Add items from the catalog.',
+    clearOutfit: 'Clear',
 
     // Color Suggestions
     suggestColor: 'Suggest Colors',
@@ -59,52 +59,40 @@ export const translations = {
     // VirtuFit Client
     virtualTryOnTitle: 'Your Virtual Try-On',
     virtualTryOnSubtitle: 'Upload your photo and select items to see them on you.',
+    howToUseTitle: 'How to Use VirtuFit',
+    instruction1: 'Upload your photo or use your camera',
+    instruction2: "Paste an e-commerce URL and click 'Load' to import items",
+    instruction3: 'Search and select items from the catalog to try them on',
+    instruction4: 'Change colors using the color palette below',
+    instructionNote: 'Note: Drag & drop items onto your photo for an instant try-on.',
 
-    // Import from Web
-    importFromWeb: 'Import from Web',
-    importFromWebSubtitle: 'Paste an e-commerce URL to extract items.',
-    catalogUrlPlaceholder: 'https://www.zalando.fr/mode-homme/',
-    loadCatalog: 'Load',
-    resetToDefault: 'Reset to Default',
-    catalogLoaded: 'Catalog loaded',
-    itemsCount: 'items',
-    catalogError: 'Catalog error',
+    // URL Scraper
+    scrapeUrlTitle: 'Import from Web',
+    scrapeUrlDescription: 'Paste an e-commerce URL to extract items.',
+    scrapeUrlPlaceholder: 'https://example.com/shop/t-shirts',
+    scrapeUrlButton: 'Load',
+    scraping: 'Loading...',
+    clearScraped: 'Reset to Default',
+    loadMore: 'Load More',
 
-    // Search
-    searchItems: 'Search items...',
-    noItemsFound: 'No items found',
-
-    // Image Panel
-    dragDropHint: 'Drag & drop a catalog item here',
-    fileFormatHint: 'PNG, JPEG up to 10MB',
-
-    // Camera
-    capturePhoto: 'Capture Photo',
-    cancel: 'Cancel',
-
-    // Item Preview
-    selectedItems: 'Selected Items',
-    recentItems: 'Recent Items',
-
-    // Cart
-    cartTitle: 'Your Items',
-    cartSubtitle: 'Drag & drop items onto your photo',
-    cartEmpty: 'Your cart is empty. Add items from the catalog.',
-    clearOutfit: 'Clear Outfit',
-
-    // User Guide
-    guideTitle: 'How to Use VirtuFit',
-    guideStep1: '1. Upload your photo or use your camera',
-    guideStep2: "2. Paste an e-commerce URL and click 'Load' to import items",
-    guideStep3: '3. Search and select items from the catalog to try them on',
-    guideStep4: '4. Change colors using the color palette below',
-    guideNote: 'Note: Drag & drop items onto your photo for instant try-on',
+    // Settings
+    settingsTitle: 'AI Settings',
+    settingsDescription: 'Configure your preferred AI model for image generation.',
+    aiProvider: 'AI Provider',
+    providerSelect: 'Select a provider',
+    providerOpenAI: 'OpenAI (DALL-E)',
+    providerLeonardo: 'Leonardo AI',
+    providerSeedream: 'SeeDream',
+    apiKey: 'API Key',
+    settingsNote: 'Your API key is stored securely in your browser.',
+    settingsSave: 'Save',
+    advancedSettings: 'AI Model',
   },
   fr: {
     // Header
     appName: 'VirtuFit',
     tagline: "Essayage Virtuel pour l'E-commerce",
-    aiPowered: 'Essayage Virtuel Alimenté par IA',
+    aiPowered: "Propulsé par l'IA",
 
     // Language Switcher
     language: 'Langue',
@@ -113,12 +101,18 @@ export const translations = {
 
     // Catalog Panel
     catalogTitle: 'Sélectionner un article',
+    new: 'Nouveau',
+    promo: 'Promo',
+    catalogEmpty: "Le catalogue est vide. Essayez d'analyser une URL ou de recharger.",
+    searchPlaceholder: 'Rechercher des articles...',
+    noResults: 'Aucun article ne correspond à votre recherche.',
+    tryOn: 'Essayer',
     upload: 'Télécharger',
     catalog: 'Catalogue',
     cart: 'Panier',
 
     // Image Panel
-    uploadPrompt: 'Cliquez ici pour télécharger une photo et commencer.',
+    uploadPrompt: 'Téléchargez une photo pour commencer.',
     generating: 'Génération de votre nouveau look...',
     changeColor: 'Changer de couleur',
 
@@ -128,26 +122,18 @@ export const translations = {
 
     // Photo Upload Panel
     uploadTitle: 'Téléchargez votre photo',
-    uploadSubtitle: 'Téléchargez une photo claire de face pour de meilleurs résultats.',
+    uploadSubtitle: 'Téléchargez une photo claire et de face pour de meilleurs résultats.',
     uploadButton: 'Choisir un fichier',
     fileSelected: 'Fichier :',
     noFileSelected: 'Aucun fichier sélectionné.',
     or: 'OU',
     useCamera: 'Utiliser la caméra',
 
-    // Settings
-    settingsTitle: 'Paramètres AI',
-    settingsDescription:
-      "Configurez le modèle AI pour l'essayage virtuel. Les modifications sont enregistrées automatiquement.",
-    aiProvider: 'Fournisseur AI',
-    apiKey: 'Clé API',
-    providerSelect: 'Sélectionner un fournisseur',
-    providerOpenAI: 'OpenAI (DALL-E 3)',
-    providerGemini: 'Google Gemini',
-    providerLeonardo: 'Leonardo AI',
-    providerSeedream: 'Seedream 4.0',
-    settingsSave: 'Enregistrer',
-    settingsNote: 'Votre clé API est stockée uniquement dans votre navigateur.',
+    // Cart
+    cartTitle: 'Vos articles',
+    cartSubtitle: 'Faites glisser les articles sur votre photo',
+    cartEmpty: 'Votre panier est vide. Ajoutez des articles depuis le catalogue.',
+    clearOutfit: 'Effacer',
 
     // Color Suggestions
     suggestColor: 'Suggérer des couleurs',
@@ -161,46 +147,35 @@ export const translations = {
     virtualTryOnTitle: 'Votre essayage virtuel',
     virtualTryOnSubtitle:
       'Téléchargez votre photo et sélectionnez des articles pour les voir sur vous.',
+    howToUseTitle: 'Comment utiliser VirtuFit',
+    instruction1: 'Téléchargez votre photo ou utilisez votre caméra',
+    instruction2: "Collez une URL d'e-commerce et cliquez sur 'Charger' pour importer des articles",
+    instruction3: 'Recherchez et sélectionnez des articles du catalogue pour les essayer',
+    instruction4: "Changez les couleurs à l'aide de la palette de couleurs ci-dessous",
+    instructionNote:
+      'Note : Glissez-déposez les articles sur votre photo pour un essayage instantané.',
 
-    // Import from Web
-    importFromWeb: 'Importer depuis le Web',
-    importFromWebSubtitle: 'Collez une URL e-commerce pour extraire les articles.',
-    catalogUrlPlaceholder: 'https://www.zalando.fr/mode-homme/',
-    loadCatalog: 'Charger',
-    resetToDefault: 'Réinitialiser',
-    catalogLoaded: 'Catalogue chargé',
-    itemsCount: 'articles',
-    catalogError: 'Erreur de catalogue',
+    // URL Scraper
+    scrapeUrlTitle: 'Importer depuis le Web',
+    scrapeUrlDescription: "Collez une URL d'e-commerce pour extraire les articles.",
+    scrapeUrlPlaceholder: 'https://example.com/boutique/t-shirts',
+    scrapeUrlButton: 'Charger',
+    scraping: 'Chargement...',
+    clearScraped: 'Réinitialiser',
+    loadMore: 'Voir plus',
 
-    // Search
-    searchItems: 'Rechercher des articles...',
-    noItemsFound: 'Aucun article trouvé',
-
-    // Image Panel
-    dragDropHint: 'Glissez-déposez un article du catalogue ici',
-    fileFormatHint: "PNG, JPEG jusqu'à 10 Mo",
-
-    // Camera
-    capturePhoto: 'Prendre une photo',
-    cancel: 'Annuler',
-
-    // Item Preview
-    selectedItems: 'Articles sélectionnés',
-    recentItems: 'Articles récents',
-
-    // Cart
-    cartTitle: 'Vos articles',
-    cartSubtitle: 'Glissez-déposez des articles sur votre photo',
-    cartEmpty: 'Votre panier est vide. Ajoutez des articles du catalogue.',
-    clearOutfit: 'Effacer',
-
-    // User Guide
-    guideTitle: 'Comment utiliser VirtuFit',
-    guideStep1: '1. Téléchargez votre photo ou utilisez votre caméra',
-    guideStep2: "2. Collez une URL e-commerce et cliquez sur 'Charger' pour importer des articles",
-    guideStep3: '3. Recherchez et sélectionnez des articles du catalogue pour les essayer',
-    guideStep4: '4. Changez les couleurs avec la palette ci-dessous',
-    guideNote: 'Note : Glissez-déposez des articles sur votre photo pour un essayage instantané',
+    // Settings
+    settingsTitle: 'Paramètres IA',
+    settingsDescription: "Configurez votre modèle d'IA préféré pour la génération d'images.",
+    aiProvider: "Fournisseur d'IA",
+    providerSelect: 'Sélectionnez un fournisseur',
+    providerOpenAI: 'OpenAI (DALL-E)',
+    providerLeonardo: 'Leonardo AI',
+    providerSeedream: 'SeeDream',
+    apiKey: 'Clé API',
+    settingsNote: 'Votre clé API est stockée en toute sécurité dans votre navigateur.',
+    settingsSave: 'Enregistrer',
+    advancedSettings: 'Model IA',
   },
 };
 

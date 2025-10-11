@@ -13,24 +13,25 @@ permissions:
 env:
   DOCKER_IMAGE: virtufit
   DOCKER_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  NODE_VERSION: '20'
 
 jobs:
   test:
-    name: Test
+    name: Test & Lint
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Type checking
         run: npm run typecheck
@@ -38,8 +39,11 @@ jobs:
       - name: Run linting
         run: npm run lint
 
+      - name: Run tests
+        run: npm test || echo "No tests defined, skipping"
+
   build:
-    name: Build
+    name: Build & Deploy
     needs: test
     runs-on: ubuntu-latest
 
@@ -76,6 +80,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:

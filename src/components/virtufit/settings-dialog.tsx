@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,61 +20,37 @@ import {
 } from '@/components/ui/select';
 import { Settings } from 'lucide-react';
 import { useI18n } from '@/context/i18n-context';
+import { useAISettings } from '@/hooks/use-ai-settings';
 
-type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream';
+type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream' | 'replicate';
 
-interface AISettings {
-  provider: AIProvider;
-  apiKey: string;
-}
-
-export function SettingsDialog() {
+export function SettingsDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const { t } = useI18n();
-  const [settings, setSettings] = useState<AISettings>({
-    provider: 'gemini',
-    apiKey: '',
-  });
+  const { settings, updateSettings } = useAISettings();
 
-  // Load settings from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('virtufit-ai-settings');
-    if (saved) {
-      try {
-        setSettings(JSON.parse(saved));
-      } catch (error) {
-        console.error('Failed to load AI settings:', error);
-      }
-    }
-  }, []);
+  // S'assurer que Replicate est la valeur par défaut si settings.provider n'existe pas
+  const provider = settings.provider || 'replicate';
 
-  // Save settings to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('virtufit-ai-settings', JSON.stringify(settings));
-  }, [settings]);
-
-  const handleProviderChange = (provider: AIProvider) => {
-    setSettings((prev) => ({ ...prev, provider }));
+  const handleProviderChange = (newProvider: string) => {
+    // Clear API key when switching providers to ensure user enters correct key for new provider
+    updateSettings({ provider: newProvider as AIProvider, apiKey: '' });
   };
-
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings((prev) => ({ ...prev, apiKey: e.target.value }));
+    updateSettings({ apiKey: e.target.value });
   };
-
   const handleSave = () => {
     localStorage.setItem('virtufit-ai-settings', JSON.stringify(settings));
+    onOpenChange(false);
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="border-2 border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-200 shadow-sm"
-        >
-          <Settings className="h-4 w-4 text-primary" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] bg-gradient-to-br from-background to-muted/20 border-2 border-primary/20">
         <DialogHeader className="pb-4">
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent flex items-center gap-2">
@@ -90,7 +64,7 @@ export function SettingsDialog() {
             <Label htmlFor="ai-provider" className="text-base font-semibold text-foreground">
               {t('aiProvider')}
             </Label>
-            <Select value={settings.provider} onValueChange={handleProviderChange}>
+            <Select value={provider} onValueChange={handleProviderChange}>
               <SelectTrigger
                 id="ai-provider"
                 className="h-12 border-2 border-primary/20 hover:border-primary transition-all"
@@ -101,7 +75,7 @@ export function SettingsDialog() {
                 <SelectItem value="gemini" className="py-3">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    {t('providerGemini')}
+                    Gemini (Banana)
                   </div>
                 </SelectItem>
                 <SelectItem value="openai" className="py-3">
@@ -120,6 +94,12 @@ export function SettingsDialog() {
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                     {t('providerSeedream')}
+                  </div>
+                </SelectItem>
+                <SelectItem value="replicate" className="py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                    Replicate
                   </div>
                 </SelectItem>
               </SelectContent>

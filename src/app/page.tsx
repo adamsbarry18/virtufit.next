@@ -9,9 +9,9 @@ export default function Home() {
   );
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      <main className="flex-grow overflow-hidden">
+      <main className="flex-grow overflow-y-auto">
         <VirtuFitClient catalogItems={catalogItems} />
       </main>
     </div>
