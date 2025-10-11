@@ -24,7 +24,6 @@ import { useAISettings } from '@/hooks/use-ai-settings';
 
 type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream';
 
-
 export function SettingsDialog({
   open,
   onOpenChange,
@@ -113,7 +112,11 @@ export function SettingsDialog({
               id="api-key"
               placeholder="sk-... ou votre clé API personnelle"
               className="h-12 border-2 border-primary/20 hover:border-primary transition-all"
-              value={provider === 'replicate' && !settings.apiKey ? 'AIzaSyCd_y8romC0nRDe_YzyEH1kuK05xwFgJXE' : settings.apiKey}
+              value={
+                provider === 'replicate' && !settings.apiKey
+                  ? 'AIzaSyCd_y8romC0nRDe_YzyEH1kuK05xwFgJXE'
+                  : settings.apiKey
+              }
               onChange={handleApiKeyChange}
               type="password"
             />

@@ -76,7 +76,13 @@ const generateTryOnImageFlow = ai.defineFlow(
   - If multiple clothing items are provided, place them on the user in a realistic way (e.g., shirt on torso, hat on head).`;
 
     if (input.newColor) {
-      textPrompt += `\n- IMPORTANT: Change the color of the main clothing item to ${input.newColor}. Keep the original style and texture, just change the color.`;
+      textPrompt += `\n- CRITICAL: The user wants to change the color of the clothing item to ${input.newColor}. 
+      You MUST generate a NEW image with the clothing item in the new color ${input.newColor}.
+      - Preserve all the original design elements, patterns, and textures
+      - Only change the color to ${input.newColor}
+      - Make sure the color change is visible and realistic
+      - The result must be visually different from the original clothing item
+      - Do not return the original image unchanged`;
     }
 
     // Route to the selected provider. Each provider helper prepares the payload

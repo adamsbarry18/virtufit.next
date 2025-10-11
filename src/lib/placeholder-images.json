@@ -2,183 +2,338 @@
   "placeholderImages": [
     {
       "id": "item-1",
-      "description": "Placeholder image 1",
+      "description": "Virtual Model Matting",
       "imageUrl": "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/6f5fdf2ab2f8990391936ee22dbde735.jpg",
-      "imageHint": "virtual model matting"
+      "imageHint": "virtual model matting",
+      "brand": "FashionAI",
+      "price": 79.99,
+      "rating": 4.6,
+      "reviews": 150,
+      "status": "new"
     },
     {
       "id": "item-2",
-      "description": "Placeholder image 2",
+      "description": "Pulls Originaux",
       "imageUrl": "https://lafrenchtouch.co/wp-content/uploads/2020/10/pulls-originaux-501x600.jpg.webp",
-      "imageHint": "pulls originaux"
+      "imageHint": "pulls originaux",
+      "brand": "La French Touch",
+      "price": 55,
+      "rating": 4.8,
+      "reviews": 320,
+      "status": null
     },
     {
       "id": "item-3",
-      "description": "Placeholder image 3",
+      "description": "Inte Coeur Marine",
       "imageUrl": "https://www.cocorico.store/cdn/shop/files/INTE-COEUR-MARINE.jpg?v=1720099111&width=1056",
-      "imageHint": "inte coeur marine"
+      "imageHint": "inte coeur marine",
+      "brand": "Cocorico",
+      "price": 39.95,
+      "rating": 4.5,
+      "reviews": 98,
+      "status": "promo",
+      "originalPrice": 49.95
     },
     {
       "id": "item-4",
-      "description": "Placeholder image 4",
+      "description": "Inte Coeur Blanc",
       "imageUrl": "https://www.cocorico.store/cdn/shop/files/INTE-COEUR-BLANC.jpg?v=1720099044&width=1056",
-      "imageHint": "inte coeur blanc"
+      "imageHint": "inte coeur blanc",
+      "brand": "Cocorico",
+      "price": 39.95,
+      "rating": 4.7,
+      "reviews": 112,
+      "status": null
     },
     {
       "id": "item-5",
-      "description": "Placeholder image 5",
+      "description": "Stylish Graphic Tee",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRFRWG2JEW9f-CBkzNkhmgGKx0unTmYO1BCg&s",
-      "imageHint": "google thumbnail 1"
+      "imageHint": "graphic tee",
+      "brand": "Urban Art",
+      "price": 25,
+      "rating": 4.3,
+      "reviews": 75,
+      "status": "new"
     },
     {
       "id": "item-6",
-      "description": "Placeholder image 6",
+      "description": "Red Jacket",
       "imageUrl": "https://www.marquesavenue.com/media/cache/wishibam_shop_product_thumbnail/22/b5/7897d4a520b031f4d89d3cc51a20.jpg",
-      "imageHint": "product thumbnail"
+      "imageHint": "red jacket",
+      "brand": "Avenue",
+      "price": 120,
+      "rating": 4.9,
+      "reviews": 410,
+      "status": null
     },
     {
       "id": "item-7",
-      "description": "Placeholder image 7",
+      "description": "Costume Bleu",
       "imageUrl": "https://www.faubourgsaintsulpice.fr/wp-content/uploads/2018/04/5-12.jpg",
-      "imageHint": "faubourg saint sulpice"
+      "imageHint": "blue suit",
+      "brand": "Saint Sulpice",
+      "price": 450,
+      "rating": 5,
+      "reviews": 89,
+      "status": null
     },
     {
       "id": "item-8",
-      "description": "Placeholder image 8",
+      "description": "Chemise à Carreaux",
       "imageUrl": "https://m.media-amazon.com/images/I/51mNW-aaeNL._UY1000_.jpg",
-      "imageHint": "amazon image"
+      "imageHint": "checkered shirt",
+      "brand": "Amazon Essentials",
+      "price": 32.5,
+      "rating": 4.1,
+      "reviews": 550,
+      "status": "promo",
+      "originalPrice": 40
     },
     {
       "id": "item-9",
-      "description": "Placeholder image 9",
+      "description": "Chemise Blanche",
       "imageUrl": "https://www.itailor.fr/images/product/shirt/it697-2.png",
-      "imageHint": "itailor shirt"
+      "imageHint": "white shirt",
+      "brand": "iTailor",
+      "price": 65,
+      "rating": 4.6,
+      "reviews": 210,
+      "status": null
     },
     {
       "id": "item-10",
-      "description": "Placeholder image 10",
+      "description": "Sous-vêtements Homme",
       "imageUrl": "https://cdn.monsieurtshirt.com/images/97879/page_helmet/sous-vetements-homme.jpg?t=1719841382000",
-      "imageHint": "sous-vetements homme"
+      "imageHint": "mens underwear",
+      "brand": "Monsieur TSHIRT",
+      "price": 22,
+      "rating": 4.8,
+      "reviews": 430,
+      "status": "new"
     },
     {
       "id": "item-11",
-      "description": "Placeholder image 11",
+      "description": "Floral Dress",
       "imageUrl": "https://images.cdn.inspogroup.net/WGvkQxQhgzFIGxH0IMdBQDnzp8dO-cnjBr6Rm55DOwM/g:ce/trim:10/h:440/w:330/czM6L/y9zdH/lsaWdodC1pbWctcHJvY2Vzc2luZy9waG90b2JveC80OTEzZjBhNGMxNGVhNDU1MmJjYWViZTQ0ZDkyNmY3OS5qcGc",
-      "imageHint": "inspogroup image"
+      "imageHint": "floral dress",
+      "brand": "Inspo",
+      "price": 89.9,
+      "rating": 4.2,
+      "reviews": 123,
+      "status": null
     },
     {
       "id": "item-12",
-      "description": "Placeholder image 12",
+      "description": "Men's Jacket",
       "imageUrl": "https://primedia.primark.com/i/primark/WK45%20-%20HBC%20-%20Mens%20-%20Coats%20%26%20Jackets",
-      "imageHint": "primark media"
+      "imageHint": "mens jacket",
+      "brand": "Primark",
+      "price": 99.99,
+      "rating": 4.4,
+      "reviews": 188,
+      "status": "promo",
+      "originalPrice": 129.99
     },
     {
       "id": "item-13",
-      "description": "Placeholder image 13",
+      "description": "Hoodie Bleu",
       "imageUrl": "https://www.b-z-b.com/on/demandware.static/-/Sites-Bizzbee-master-catalog/default/dw3ff88ab0/images/2007184_16707_V2.jpg?frz-height=600&frz-width=400&frz-gravity=center",
-      "imageHint": "bizzbee product"
+      "imageHint": "blue hoodie",
+      "brand": "Bizzbee",
+      "price": 49.9,
+      "rating": 4.7,
+      "reviews": 245,
+      "status": null
     },
     {
       "id": "item-14",
-      "description": "Placeholder image 14",
+      "description": "T-shirt Col Rond",
       "imageUrl": "https://cdn.laredoute.com/cdn-cgi/image/width=400,height=400,fit=pad,dpr=1/products/4/a/0/4a09445116db669a8dbd71eb7c8ba3fa.jpg",
-      "imageHint": "laredoute product"
+      "imageHint": "round-neck t-shirt",
+      "brand": "La Redoute",
+      "price": 19.99,
+      "rating": 4,
+      "reviews": 88,
+      "status": null
     },
     {
       "id": "item-15",
-      "description": "Placeholder image 15",
+      "description": "Sweatshirt Gris",
       "imageUrl": "https://photos6.spartoo.com/photos/272/27218320/27218320_200_A.jpg",
-      "imageHint": "spartoo photo"
+      "imageHint": "gray sweatshirt",
+      "brand": "Spartoo",
+      "price": 62,
+      "rating": 4.5,
+      "reviews": 132,
+      "status": "new"
     },
     {
       "id": "item-16",
-      "description": "Placeholder image 16",
+      "description": "Polo Noir",
       "imageUrl": "https://images.hugoboss.com/is/image/boss/hbeu50549991_001_350?$large$=&fit=crop,1&align=1,1&bgcolor=ebebeb&lastModified=1758932178000&qlt=80&resMode=sharp2&wid=338",
-      "imageHint": "hugo boss"
+      "imageHint": "black polo",
+      "brand": "Hugo Boss",
+      "price": 110,
+      "rating": 4.9,
+      "reviews": 360,
+      "status": null
     },
     {
       "id": "item-17",
-      "description": "Placeholder image 17",
+      "description": "Sweatshirt Gris Melange",
       "imageUrl": "https://cdn.shopify.com/s/files/1/0630/6532/5726/files/1000830-320-grey-melange-585.jpg?v=1747907552&width=400&height=515&crop=center",
-      "imageHint": "shopify image"
+      "imageHint": "gray sweatshirt",
+      "brand": "Shopify Basic",
+      "price": 58,
+      "rating": 4.3,
+      "reviews": 99,
+      "status": null
     },
     {
       "id": "item-18",
-      "description": "Placeholder image 18",
+      "description": "Robe d'été",
       "imageUrl": "https://www.bleudazur.com/vdi/wp-content/uploads/2023/02/vdi-vetements-femme-6-min.jpg",
-      "imageHint": "bleudazur"
+      "imageHint": "summer dress",
+      "brand": "Bleu d'Azur",
+      "price": 130,
+      "rating": 4.7,
+      "reviews": 140,
+      "status": "promo",
+      "originalPrice": 150
     },
     {
       "id": "item-19",
-      "description": "Placeholder image 19",
+      "description": "Veste à Carreaux",
       "imageUrl": "https://witt-gruppe-res.cloudinary.com/t_fr,$w_400,f_auto/p/101.00ZUK66552-005.036.jpg",
-      "imageHint": "witt gruppe"
+      "imageHint": "checkered jacket",
+      "brand": "Witt",
+      "price": 85,
+      "rating": 4.4,
+      "reviews": 65,
+      "status": null
     },
     {
       "id": "item-20",
-      "description": "Placeholder image 20",
+      "description": "Culotte Taille Haute",
       "imageUrl": "https://muune.fr/18831-m_home_default/culotte-taille-haute-coton-bio-ethique-bordeaux-nam-burgundy.jpg",
-      "imageHint": "muune culotte"
+      "imageHint": "high-waisted underwear",
+      "brand": "Muune",
+      "price": 28,
+      "rating": 4.9,
+      "reviews": 215,
+      "status": "new"
     },
     {
       "id": "item-21",
-      "description": "Placeholder image 21",
+      "description": "Ensemble Sous-vêtement",
       "imageUrl": "https://api.doyougreen.com//storage/uploads/products/13/ensemble-sous-vetement-femme-de-marque_large.jpg",
-      "imageHint": "doyougreen"
+      "imageHint": "lingerie set",
+      "brand": "DoYouGreen",
+      "price": 75,
+      "rating": 4.8,
+      "reviews": 180,
+      "status": null
     },
     {
       "id": "item-22",
-      "description": "Placeholder image 22",
+      "description": "T-shirt Imprimé",
       "imageUrl": "https://www.b-z-b.com/on/demandware.static/-/Sites-Bizzbee-master-catalog/default/dw4b742cc0/images/2005426_16630_V2.jpg?frz-height=600&frz-width=400&frz-gravity=center",
-      "imageHint": "bizzbee product 2"
+      "imageHint": "printed t-shirt",
+      "brand": "Bizzbee",
+      "price": 24.9,
+      "rating": 4.2,
+      "reviews": 115,
+      "status": null
     },
     {
       "id": "item-23",
-      "description": "Placeholder image 23",
+      "description": "Chemise à Manches Courtes",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-yC16NpIVIEQiZyMlGKSZNjV0IBpKcIIfVA&s",
-      "imageHint": "google thumbnail 2"
+      "imageHint": "short-sleeve shirt",
+      "brand": "Generic",
+      "price": 29.99,
+      "rating": 3.9,
+      "reviews": 45,
+      "status": null
     },
     {
       "id": "item-24",
-      "description": "Placeholder image 24",
+      "description": "Hijab Chic",
       "imageUrl": "https://www.iqrashop.com/images/33898-vetement-femme-musulmane-voilee-turquie-hijab-chic-5.jpg",
-      "imageHint": "iqra shop"
+      "imageHint": "chic hijab",
+      "brand": "IqraShop",
+      "price": 45,
+      "rating": 4.9,
+      "reviews": 320,
+      "status": null
     },
     {
       "id": "item-25",
-      "description": "Placeholder image 25",
+      "description": "Robe Fleurie",
       "imageUrl": "https://cdn.laredoute.com/cdn-cgi/image/width=400,height=400,fit=pad,dpr=1/products/e/0/a/e0a439958ba47da170412bfdc83e12d4.jpg",
-      "imageHint": "laredoute product 2"
+      "imageHint": "flowery dress",
+      "brand": "La Redoute",
+      "price": 95,
+      "rating": 4.6,
+      "reviews": 190,
+      "status": "promo",
+      "originalPrice": 110
     },
     {
       "id": "item-26",
-      "description": "Placeholder image 26",
+      "description": "Basique d'été",
       "imageUrl": "https://www.coindesfilles.fr/media/wysiwyg/vetement-basique-ete-femme.jpg",
-      "imageHint": "coin des filles"
+      "imageHint": "summer basic",
+      "brand": "Coin des Filles",
+      "price": 30,
+      "rating": 4.1,
+      "reviews": 80,
+      "status": null
     },
     {
       "id": "item-27",
-      "description": "Placeholder image 27",
+      "description": "Pull en Laine",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKR9kyT7sHc2tGf998IWCMRtfTv7aGSV536A&s",
-      "imageHint": "google thumbnail 3"
+      "imageHint": "wool sweater",
+      "brand": "Wooly",
+      "price": 150,
+      "rating": 4.8,
+      "reviews": 250,
+      "status": "new"
     },
     {
       "id": "item-28",
-      "description": "Placeholder image 28",
+      "description": "Robe de Soirée",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhlo67EnH16QO2WAzQXnesexLYSkv2RKT9bk3mGukuY5Slpf6lmVz_bSxRAKV0m5SNrOo&usqp=CAU",
-      "imageHint": "google thumbnail 4"
+      "imageHint": "evening dress",
+      "brand": "Elegance",
+      "price": 250,
+      "rating": 4.9,
+      "reviews": 120,
+      "status": null
     },
     {
       "id": "item-29",
-      "description": "Placeholder image 29",
+      "description": "Blouson en Cuir",
       "imageUrl": "https://img.leboncoin.fr/api/v1/lbcpb1/images/67/12/08/671208c0525d0665c2af421a9cd23cafaa60337d.jpg?rule=ad-large",
-      "imageHint": "leboncoin"
+      "imageHint": "leather jacket",
+      "brand": "Le Bon Coin",
+      "price": 180,
+      "rating": 4.5,
+      "reviews": 95,
+      "status": null
     },
     {
       "id": "item-30",
-      "description": "Placeholder image 30",
+      "description": "Veste d'hiver",
       "imageUrl": "https://images.napali.app/global/element-products/all/default/large/eljjk00143_element,w_tegh_frt1.jpg",
-      "imageHint": "napali"
+      "imageHint": "winter jacket",
+      "brand": "Element",
+      "price": 220,
+      "rating": 4.7,
+      "reviews": 450,
+      "status": null
     }
   ]
 }

@@ -170,14 +170,20 @@ export async function POST(req: NextRequest) {
           // get title/alt
           const alt = (img.attr('alt') || '').trim();
           const title =
-            $el.find('h2, h3, .title, .product-title, [class*="title"]').first().text().trim() ||
+            $el
+              .find('h2, h3, .title, .product-title, [class*="title"], [itemprop="name"]')
+              .first()
+              .text()
+              .trim() ||
             alt ||
             '';
 
           // price heuristics
           const price =
             $el
-              .find('[data-testid*="price"], .price, .product-price, .price-current, .price-amount')
+              .find(
+                '[data-testid*="price"], [class*="price"], .price-current, .price-amount, [itemprop="price"]'
+              )
               .first()
               .text()
               .trim() ||
@@ -186,7 +192,7 @@ export async function POST(req: NextRequest) {
 
           // rating heuristics
           const ratingText = $el
-            .find('[data-testid*="rating"], .rating, .stars')
+            .find('[data-testid*="rating"], .rating, .stars, [itemprop="ratingValue"]')
             .first()
             .text()
             .trim();
@@ -197,6 +203,14 @@ export async function POST(req: NextRequest) {
           const badge =
             $el
               .find('.badge, .label, .pill, [class*="badge"], [class*="label"]')
+              .first()
+              .text()
+              .trim() || undefined;
+
+          // seller/brand heuristics
+          const seller =
+            $el
+              .find('[data-testid*="brand"], [class*="brand"], .brand, .seller, [itemprop="brand"]')
               .first()
               .text()
               .trim() || undefined;
@@ -223,6 +237,7 @@ export async function POST(req: NextRequest) {
             rating,
             badge,
             url: prodUrl,
+            seller,
           });
         });
 

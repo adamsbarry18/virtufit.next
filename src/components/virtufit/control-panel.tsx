@@ -18,21 +18,28 @@ interface ControlPanelProps {
   isSuggestionLoading: boolean;
   itemsOnModel: ImagePlaceholder[];
   onClearOutfit: () => void;
-  onGenerateImage: (item: ImagePlaceholder, color?: string) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isLoading: boolean;
+  searchQuery: string;
+  onSearchQueryChange: (query: string) => void;
 }
 
 export function ControlPanel({
   onPhotoUpload,
   catalogItems,
+  onAddToCart,
   cartItems,
   onRemoveFromCart,
+  onSuggestColors,
+  isSuggestionLoading,
   itemsOnModel,
   onClearOutfit,
-  onGenerateImage,
   activeTab,
   setActiveTab,
+  isLoading,
+  searchQuery,
+  onSearchQueryChange,
 }: ControlPanelProps) {
   const { t } = useI18n();
   return (
@@ -57,7 +64,12 @@ export function ControlPanel({
       <TabsContent value="catalog" className="mt-4">
         <CatalogPanel
           items={catalogItems}
-          onSelectItem={(item) => onGenerateImage(item)}
+          onSelectItem={onAddToCart}
+          onSuggestColors={onSuggestColors}
+          isSuggestionLoading={isSuggestionLoading}
+          isLoading={isLoading}
+          searchQuery={searchQuery}
+          onSearchQueryChange={onSearchQueryChange}
         />
       </TabsContent>
       <TabsContent value="cart" className="mt-4">

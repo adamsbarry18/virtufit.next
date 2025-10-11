@@ -17,20 +17,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = useCallback(
     (key: TranslationKey): string => {
-      // First try the current language
-      const currentLangTranslations = translations[lang];
-      if (key in currentLangTranslations) {
-        return currentLangTranslations[key];
-      }
-
-      // Fall back to English
-      const englishTranslations = translations['en'];
-      if (key in englishTranslations) {
-        return englishTranslations[key];
-      }
-
-      // If key doesn't exist in either, return the key itself
-      return key;
+      return translations[lang][key] || translations['en'][key];
     },
     [lang]
   );
