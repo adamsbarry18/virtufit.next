@@ -22,7 +22,7 @@ import { Settings } from 'lucide-react';
 import { useI18n } from '@/context/i18n-context';
 import { useAISettings } from '@/hooks/use-ai-settings';
 
-type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream';
+type AIProvider = 'openai' | 'gemini' | 'leonardo' | 'seedream' | 'replicate';
 
 export function SettingsDialog({
   open,
@@ -34,11 +34,12 @@ export function SettingsDialog({
   const { t } = useI18n();
   const { settings, updateSettings } = useAISettings();
 
-  // S'assurer que Gemini est la valeur par défaut si settings.provider n'existe pas
-  const provider = settings.provider || 'gemini';
+  // S'assurer que Replicate est la valeur par défaut si settings.provider n'existe pas
+  const provider = settings.provider || 'replicate';
 
-  const handleProviderChange = (provider: string) => {
-    updateSettings({ provider: provider as AIProvider });
+  const handleProviderChange = (newProvider: string) => {
+    // Clear API key when switching providers to ensure user enters correct key for new provider
+    updateSettings({ provider: newProvider as AIProvider, apiKey: '' });
   };
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateSettings({ apiKey: e.target.value });
@@ -112,11 +113,7 @@ export function SettingsDialog({
               id="api-key"
               placeholder="sk-... ou votre clé API personnelle"
               className="h-12 border-2 border-primary/20 hover:border-primary transition-all"
-              value={
-                provider === 'replicate' && !settings.apiKey
-                  ? 'AIzaSyCd_y8romC0nRDe_YzyEH1kuK05xwFgJXE'
-                  : settings.apiKey
-              }
+              value={settings.apiKey}
               onChange={handleApiKeyChange}
               type="password"
             />

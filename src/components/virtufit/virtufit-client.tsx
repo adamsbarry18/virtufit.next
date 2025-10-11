@@ -16,7 +16,7 @@ import { imageUrlToDataUrl, cn } from '@/lib/utils';
 import { useI18n } from '@/context/i18n-context';
 import { Button } from '../ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Loader2, Palette, Plus } from 'lucide-react';
+import { Loader2, Palette } from 'lucide-react';
 import { ColorPicker } from '../ui/color-picker';
 import { CatalogPanel } from './catalog-panel';
 import { UrlScraperPanel } from './url-scraper-panel';
@@ -54,8 +54,16 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
 
   // Couleurs prédéfinies pour un accès rapide
   const quickColors = [
-    '#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF',
-    '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500', '#800080'
+    '#000000',
+    '#FFFFFF',
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#FF00FF',
+    '#00FFFF',
+    '#FFA500',
+    '#800080',
   ];
 
   const handlePhotoUpload = (file: File) => {
@@ -125,11 +133,15 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
         const validUris = clothingItemDataUris.filter((uri): uri is string => !!uri);
 
         if (validUris.length === 0) {
-          throw new Error(`Could not convert any clothing item images. Please check your internet connection and try again.`);
+          throw new Error(
+            `Could not convert any clothing item images. Please check your internet connection and try again.`
+          );
         }
 
         if (validUris.length !== itemsForModel.length) {
-          console.warn(`Only ${validUris.length} out of ${itemsForModel.length} clothing item images could be converted.`);
+          console.warn(
+            `Only ${validUris.length} out of ${itemsForModel.length} clothing item images could be converted.`
+          );
         }
 
         const result = await generateTryOnImage({
@@ -298,7 +310,7 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
   const hasDynamicItems = dynamicCatalogItems !== initialCatalogItems;
 
   return (
-    <div className="flex flex-col gap-6 py-6">
+    <div className="flex flex-col gap-6 py-8 px-4 mx-auto max-w-7xl">
       <HowToUseCard />
       <div className="w-full">
         {!userImage ? (
@@ -331,8 +343,10 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
                         key={color}
                         style={{ backgroundColor: color }}
                         className={cn(
-                          "w-8 h-8 rounded-full border-2 shadow-md disabled:opacity-50 focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                          selectedColor === color ? "border-primary ring-2 ring-primary" : "border-white"
+                          'w-8 h-8 rounded-full border-2 shadow-md disabled:opacity-50 focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                          selectedColor === color
+                            ? 'border-primary ring-2 ring-primary'
+                            : 'border-white'
                         )}
                         onClick={() => handleColorChange(color)}
                         disabled={itemsOnModel.length === 0 || isLoading}
@@ -341,7 +355,7 @@ export function VirtuFitClient({ catalogItems: initialCatalogItems }: VirtuFitCl
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Sélecteur de couleur personnalisé */}
                 <div>
                   <h4 className="text-sm font-medium mb-2">Couleur personnalisée</h4>

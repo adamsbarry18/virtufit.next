@@ -85,8 +85,8 @@ export const translations = {
     providerSeedream: 'SeeDream',
     apiKey: 'API Key',
     settingsNote: 'Your API key is stored securely in your browser.',
-    settingsSave: 'Save Settings',
-    advancedSettings: 'Advanced Settings',
+    settingsSave: 'Save',
+    advancedSettings: 'AI Model',
   },
   fr: {
     // Header
@@ -175,7 +175,7 @@ export const translations = {
     apiKey: 'Clé API',
     settingsNote: 'Votre clé API est stockée en toute sécurité dans votre navigateur.',
     settingsSave: 'Enregistrer',
-    advancedSettings: 'Paramètres avancés',
+    advancedSettings: 'Model IA',
   },
 };
 

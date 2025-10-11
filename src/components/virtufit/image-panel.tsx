@@ -35,9 +35,9 @@ export function ImagePanel({
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    
+
     if (!onDropItem) return;
-    
+
     try {
       const itemData = e.dataTransfer.getData('application/json');
       if (itemData) {
@@ -51,8 +51,8 @@ export function ImagePanel({
 
   return (
     <Card className="h-full flex flex-col justify-between flex-grow">
-      <div 
-        className="relative w-full flex-grow flex items-center justify-center rounded-lg bg-muted/20 min-h-[50vh] lg:min-h-[60vh]"
+      <div
+        className="relative w-full flex-grow flex items-center justify-center rounded-lg bg-muted/20 min-h-[30vh] lg:min-h-[40vh]"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >

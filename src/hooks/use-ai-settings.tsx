@@ -10,7 +10,7 @@ export interface AISettings {
 }
 
 // Module-level shared state so multiple hook instances stay in sync
-let sharedSettings: AISettings = { provider: 'gemini', apiKey: '' };
+let sharedSettings: AISettings = { provider: 'replicate', apiKey: '' };
 const listeners: Array<(s: AISettings) => void> = [];
 
 function setSharedSettings(newSettings: AISettings) {

@@ -23,6 +23,7 @@ interface ControlPanelProps {
   isLoading: boolean;
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
+  onTryOnItem: (item: ImagePlaceholder) => void;
 }
 
 export function ControlPanel({
@@ -40,6 +41,7 @@ export function ControlPanel({
   isLoading,
   searchQuery,
   onSearchQueryChange,
+  onTryOnItem,
 }: ControlPanelProps) {
   const { t } = useI18n();
   return (
@@ -65,6 +67,7 @@ export function ControlPanel({
         <CatalogPanel
           items={catalogItems}
           onSelectItem={onAddToCart}
+          onTryOnItem={onTryOnItem}
           onSuggestColors={onSuggestColors}
           isSuggestionLoading={isSuggestionLoading}
           isLoading={isLoading}

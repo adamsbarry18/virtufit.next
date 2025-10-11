@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { useI18n } from '@/context/i18n-context';
-import { Loader2, Search, Shirt, ShoppingBag, Star, Palette, PlusCircle } from 'lucide-react';
+import { Loader2, Search, Shirt, ShoppingBag, Star, Palette } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '../ui/skeleton';
@@ -66,7 +66,6 @@ const CatalogSkeleton = () => (
 
 export function CatalogPanel({
   items,
-  onSelectItem,
   onTryOnItem,
   isLoading,
   searchQuery,
@@ -114,7 +113,7 @@ export function CatalogPanel({
               {items.map((item) => (
                 <div key={item.id} className="space-y-2 group">
                   <div className="overflow-hidden rounded-lg">
-                    <div 
+                    <div
                       className="aspect-[3/4] bg-muted relative cursor-pointer"
                       draggable
                       onDragStart={(e) => handleDragStart(e, item)}
