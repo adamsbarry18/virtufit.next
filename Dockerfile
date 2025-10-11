@@ -1,48 +1,56 @@
-# Multi-stage Dockerfile tuned for Next.js builds:
-# - deps: install all dependencies (dev + prod)
+# Multi-stage Dockerfile optimized for Next.js builds with Alpine Linux
+# - deps: install dependencies with optimal caching
 # - builder: build the Next app
-# - runner: copy only production artifacts and run `next start`
+# - runner: minimal runtime image with standalone output
 
-# Stage 1 — deps (install all deps so build tools are available)
-FROM node:20-bullseye-slim AS deps
+########################
+# Dependencies Stage   #
+########################
+FROM node:20-alpine AS deps
 WORKDIR /app
-# Install common build tools (uncomment additional packages if your project needs them)
-RUN apt-get update && apt-get install -y ca-certificates build-essential python3 git --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# Installer libc6-compat pour certains paquets natifs
+RUN apk add --no-cache libc6-compat
+
+# Installer uniquement les dépendances (cache optimisé)
 COPY package.json package-lock.json* ./
-# Install all deps (dev + prod) required for build
 RUN npm ci
 
-# Stage 2 — builder (build the Next.js app)
-FROM node:20-bullseye-slim AS builder
+########################
+# Builder Stage        #
+########################
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY . .
-# ensure public exists to avoid COPY failure in the runner stage when public/ is missing
-RUN mkdir -p /app/public
-# copy installed deps from deps stage so build can reuse them
+
 COPY --from=deps /app/node_modules ./node_modules
-ENV NODE_ENV=production
+COPY . .
+
 ENV NEXT_TELEMETRY_DISABLED=1
-# Build the Next.js app
+ENV NODE_ENV=production
+
 RUN npm run build
 
-# Prune devDependencies to keep only production deps
-RUN npm prune --production
-
-# Stage 3 — runner (minimal runtime image)
-FROM node:20-bullseye-slim AS runner
+########################
+# Runner Stage         #
+########################
+FROM node:20-alpine AS runner
 WORKDIR /app
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
 
-# Copy runtime files from builder
-COPY --from=builder /app/.next ./.next
+# Créer l'utilisateur non-root
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
+
+# Copier uniquement le strict nécessaire pour le mode standalone
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-# Optional: copy next.config.js if you rely on it at runtime
-# COPY --from=builder /app/next.config.js ./next.config.js
+
+USER nextjs
 
 EXPOSE 3000
-# Ensure the package.json contains "start": "next start"
-CMD ["npm", "start"]
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]
