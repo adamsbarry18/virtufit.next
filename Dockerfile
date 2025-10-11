@@ -38,12 +38,8 @@ COPY tsconfig.json* ./
 COPY tailwind.config.js* ./
 
 # Copy source files in order of change frequency (least to most)
-# Static assets (rarely change)
-COPY public ./public
-
 # Source code (changes more frequently)
 COPY src ./src
-COPY app ./app
 
 # Environment variables for build
 ENV NODE_ENV=production
@@ -66,7 +62,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
 # Copy built application
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Switch to non-root user
 USER nextjs
